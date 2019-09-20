@@ -1,5 +1,5 @@
 /////// CONFIG TEMPLATE ////
-// const { ipcRenderer } = require('electron');
+// const { ipcRenderer } = require('electron'); // usado para o atende electron
 ///////////////// START CONFIG /////////////////
 var BASE_URL;
 var suffix;
@@ -20,31 +20,27 @@ var USAFOTO = false;
 
 var DEBUG = 0;
 
-print('V 1.3.2');
+print('V 1.3.4');
 
 if(DEBUG == 2){
     BASE_URL    = 'json/';
     suffix      = '.json';
 }else if(DEBUG == 1){
     if (isWeb) {
-        // BASE_URL = 'http://A000001:8080/'
-        // BASE_URL    = location.protocol + '//' + location.host.substring(0,9) + ':8080/';
-	    BASE_URL    = location.protocol + '//' + location.host.split(':')[0] + ':8080/'
+        BASE_URL = location.protocol + '//' + location.host.split(':')[0] + ':8080/'
     } else {
         protocol = retorno.ssl ? 'https:' : 'http:';
-        BASE_URL    = protocol + '//' + retorno.endpoint + ':8080/';
+        BASE_URL = protocol + '//' + retorno.endpoint + ':8080/';
     }
-    suffix      = '';
+    suffix = '';
 }else{
     if (isWeb) {
-        // BASE_URL = 'http://192.168.0.42:8080/';
-        // BASE_URL    = location.protocol + '//' + location.host.substring(0,9) + '/';
-		BASE_URL    = location.protocol + '//' + location.host.split(':')[0] + ':8080/'
+        BASE_URL = location.protocol + '//' + location.host.split(':')[0] + ':8080/'
     } else {
         protocol = retorno.ssl ? 'https:' : 'http:';
-        BASE_URL    = protocol + '//' + retorno.endpoint + '/';
+        BASE_URL = protocol + '//' + retorno.endpoint + '/';
     }
-    suffix      = '';
+    suffix = '';
 }
 
 ATENDIMENTO   = BASE_URL+'atendimento/';
@@ -691,6 +687,7 @@ function loadAtendimento(){
                     emAtendimento = false;
                     contagemAtendimentoStop();
                     loadAtendimento();
+                    showMessage('ATENDIMENTO '+data.idAtendimento+' FINALIZADO COM SUCESSO!');
                   }
                 });
             }
@@ -854,6 +851,7 @@ function openModalFinalizar(data) {
         if(data.idAtendimento>0){
           lastAction = 'finalizar';
           closeModal();
+          showMessage('ATENDIMENTO '+data.idAtendimento+' FINALIZADO COM SUCESSO!');
           emAtendimento = false;
           contagemAtendimentoStop();
           loadAtendimento();
