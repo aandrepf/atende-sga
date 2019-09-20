@@ -1,0 +1,221 @@
+{
+    "id": 1,
+    "usuario": 71234,
+    "hostname": "71234",
+    "aliasCaixa": "95",
+    "tipoCaixa": "MESA",
+    "isLogado": false,
+    "politica": [{
+        "ordem": 0,
+        "chamarAteFinal": false,
+        "categoria": {
+            "id": 9,
+            "tipoCategoria": "I",
+            "nomeCategoria": "OUTROS PRODUTOS E SERVICOS PRI"
+        },
+        "caracterRegra": "{",
+        "numGrupoAtendimento": 1
+    }, {
+        "ordem": 1,
+        "chamarAteFinal": false,
+        "categoria": {
+            "id": 10,
+            "tipoCategoria": "J",
+            "nomeCategoria": "OUTROS PRODUTOS E SERVICOS  80+"
+        },
+        "caracterRegra": "",
+        "numGrupoAtendimento": 1
+    }, {
+        "ordem": 2,
+        "chamarAteFinal": false,
+        "categoria": {
+            "id": 11,
+            "tipoCategoria": "K",
+            "nomeCategoria": "OUTROS PRODUTOS E SERVICOS UNICLASS PERSON GERAL"
+        },
+        "caracterRegra": "",
+        "numGrupoAtendimento": 1
+    }, {
+        "ordem": 3,
+        "chamarAteFinal": false,
+        "categoria": {
+            "id": 12,
+            "tipoCategoria": "L",
+            "nomeCategoria": "OUTROS PRODUTOS E SERVICOS UNICLASS PERSON PRI"
+        },
+        "caracterRegra": "}",
+        "numGrupoAtendimento": 1
+    }, {
+        "ordem": 4,
+        "chamarAteFinal": true,
+        "categoria": {
+            "id": 13,
+            "tipoCategoria": "M",
+            "nomeCategoria": "OUTROS PRODUTOS E SERVICOS UNICLASS PERSON  80+"
+        },
+        "caracterRegra": "[",
+        "numGrupoAtendimento": 2
+    }, {
+        "ordem": 5,
+        "chamarAteFinal": true,
+        "categoria": {
+            "id": 14,
+            "tipoCategoria": "N",
+            "nomeCategoria": "OUTROS PRODUTOS E SERVICOS EMPRESAS GERAL"
+        },
+        "caracterRegra": "",
+        "numGrupoAtendimento": 2
+    }, {
+        "ordem": 6,
+        "chamarAteFinal": true,
+        "categoria": {
+            "id": 15,
+            "tipoCategoria": "O",
+            "nomeCategoria": "OUTROS PRODUTOS E SERVICOS EMPRESAS PRI"
+        },
+        "caracterRegra": "",
+        "numGrupoAtendimento": 2
+    }, {
+        "ordem": 7,
+        "chamarAteFinal": true,
+        "categoria": {
+            "id": 16,
+            "tipoCategoria": "P",
+            "nomeCategoria": "OUTROS PRODUTOS E SERVICOS EMPRESAS  80+"
+        },
+        "caracterRegra": "",
+        "numGrupoAtendimento": 2
+    }, {
+        "ordem": 8,
+        "chamarAteFinal": true,
+        "categoria": {
+            "id": 1,
+            "tipoCategoria": "A",
+            "nomeCategoria": "ABERTURA DE CONTA GERAL"
+        },
+        "caracterRegra": "]",
+        "numGrupoAtendimento": 3
+    }, {
+        "ordem": 9,
+        "chamarAteFinal": false,
+        "categoria": {
+            "id": 2,
+            "tipoCategoria": "B",
+            "nomeCategoria": "ABERTURA DE CONTA PRI"
+        },
+        "caracterRegra": "",
+        "numGrupoAtendimento": 4
+    }, {
+        "ordem": 10,
+        "chamarAteFinal": false,
+        "categoria": {
+            "id": 4,
+            "tipoCategoria": "D",
+            "nomeCategoria": "CARTOES PAGAMENTOS E SERVICOS GERAL"
+        },
+        "caracterRegra": "",
+        "numGrupoAtendimento": 5
+    }, {
+        "ordem": 11,
+        "chamarAteFinal": false,
+        "categoria": {
+            "id": 5,
+            "tipoCategoria": "E",
+            "nomeCategoria": "CARTOES PAGAMENTOS E SERVICOS PRI"
+        },
+        "caracterRegra": "",
+        "numGrupoAtendimento": 6
+    }, {
+        "ordem": 12,
+        "chamarAteFinal": false,
+        "categoria": {
+            "id": 6,
+            "tipoCategoria": "F",
+            "nomeCategoria": "CARTOES PAGAMENTOS E SERVICOS 80+"
+        },
+        "caracterRegra": "",
+        "numGrupoAtendimento": 7
+    }, {
+        "ordem": 13,
+        "chamarAteFinal": false,
+        "categoria": {
+            "id": 3,
+            "tipoCategoria": "C",
+            "nomeCategoria": "ABERTURA DE CONTA 80+"
+        },
+        "caracterRegra": "",
+        "numGrupoAtendimento": 8
+    }, {
+        "ordem": 14,
+        "chamarAteFinal": false,
+        "categoria": {
+            "id": 7,
+            "tipoCategoria": "G",
+            "nomeCategoria": "CARTOES PAGAMENTOS E SERVICOS UNICLASS PERSON"
+        },
+        "caracterRegra": "",
+        "numGrupoAtendimento": 9
+    }, {
+        "ordem": 15,
+        "chamarAteFinal": false,
+        "categoria": {
+            "id": 8,
+            "tipoCategoria": "H",
+            "nomeCategoria": "OUTROS PRODUTOS E SERVICOS GERAL"
+        },
+        "caracterRegra": "",
+        "numGrupoAtendimento": 10
+    }],
+    "politicaFormatada": "{IJKL}[MNOPA]BDEFCGH",
+    "token": "MTIyMDUyMDE5MjIyODM1NzEyMzQ5NW51bGw=",
+    "politicaEmissor": "Normal",
+    "senhas": [{
+        "idCategoria": 1,
+        "total": 0
+    }, {
+        "idCategoria": 2,
+        "total": 0
+    }, {
+        "idCategoria": 3,
+        "total": 0
+    }, {
+        "idCategoria": 4,
+        "total": 0
+    }, {
+        "idCategoria": 5,
+        "total": 0
+    }, {
+        "idCategoria": 6,
+        "total": 0
+    }, {
+        "idCategoria": 7,
+        "total": 0
+    }, {
+        "idCategoria": 8,
+        "total": 0
+    }, {
+        "idCategoria": 9,
+        "total": 0
+    }, {
+        "idCategoria": 10,
+        "total": 0
+    }, {
+        "idCategoria": 11,
+        "total": 0
+    }, {
+        "idCategoria": 12,
+        "total": 0
+    }, {
+        "idCategoria": 13,
+        "total": 0
+    }, {
+        "idCategoria": 14,
+        "total": 0
+    }, {
+        "idCategoria": 15,
+        "total": 0
+    }, {
+        "idCategoria": 16,
+        "total": 0
+    }]
+}

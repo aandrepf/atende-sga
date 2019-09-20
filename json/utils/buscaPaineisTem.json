@@ -1,0 +1,36 @@
+{
+    "display": [{
+        "id": 4,
+        "macAddress": "0",
+        "hostname": "127.0.0.1",
+        "tipoDisplay": 1,
+        "isAtivo": true,
+        "categoria": [{
+            "id": 31,
+            "tipoCategoria": "B ",
+            "nomeCategoria": "CAIXA PRIORITÁRIO"
+        }]
+    }, {
+        "id": 5,
+        "macAddress": "0",
+        "hostname": "127.5.0.4",
+        "tipoDisplay": 1,
+        "isAtivo": true,
+        "categoria": []
+    }, {
+        "id": 7,
+        "macAddress": "0",
+        "hostname": "557.5.0.4",
+        "tipoDisplay": 1,
+        "isAtivo": true,
+        "categoria": []
+    }, {
+        "id": 11,
+        "macAddress": "0",
+        "hostname": "227.5.0.4",
+        "tipoDisplay": 1,
+        "isAtivo": true,
+        "categoria": []
+    }],
+    "status": true
+}

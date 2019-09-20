@@ -1,0 +1,103 @@
+{
+    "usuarios": [{
+        "idUsuario": 71234,
+        "matricula": "71234",
+        "nome": "ZE",
+        "email": "FABIO@ZE.COM.BR",
+        "telefone": "(11) 1111-1111",
+        "tipoUsuario": "ATENDENTE",
+        "idTipoUsuario": 1,
+        "habilitado": true
+    }, {
+        "idUsuario": 10090301,
+        "matricula": "A0090C01",
+        "nome": "AUGUSTO FARIA",
+        "email": "APF@ARIS.COM.BR",
+        "telefone": "22",
+        "tipoUsuario": "MONITOR",
+        "idTipoUsuario": 2,
+        "habilitado": true
+    }, {
+        "idUsuario": 10090302,
+        "matricula": "A0090C02",
+        "nome": "CAIXA 2",
+        "email": "C2@0090.COM.BR",
+        "telefone": "(11) 1111-1111",
+        "tipoUsuario": "ATENDENTE",
+        "idTipoUsuario": 1,
+        "habilitado": true
+    }, {
+        "idUsuario": 10090303,
+        "matricula": "A0090C03",
+        "nome": "CAIXA 3",
+        "email": "CAIXA3@0090.COM.BR",
+        "telefone": "(11) 1111-1111",
+        "tipoUsuario": "MONITOR",
+        "idTipoUsuario": 2,
+        "habilitado": true
+    }, {
+        "idUsuario": 10090304,
+        "matricula": "A0090C04",
+        "nome": "CAIXA 4",
+        "email": "CAIXA4@0090.COM.BR",
+        "telefone": "(11) 1111-1111",
+        "tipoUsuario": "MONITOR",
+        "idTipoUsuario": 2,
+        "habilitado": true
+    }, {
+        "idUsuario": 10090305,
+        "matricula": "A0090C05",
+        "nome": "CAIXA 5",
+        "email": "CAIXA5@0090.COM.BR",
+        "telefone": "(11) 1111-1111",
+        "tipoUsuario": "MONITOR",
+        "idTipoUsuario": 2,
+        "habilitado": true
+    }, {
+        "idUsuario": 10090701,
+        "matricula": "A0090G01",
+        "nome": "GERENTE 1",
+        "email": "GERENTE1@0090.COM.BR",
+        "telefone": "(11) 1111-1111",
+        "tipoUsuario": "MONITOR",
+        "idTipoUsuario": 2,
+        "habilitado": true
+    }, {
+        "idUsuario": 10090702,
+        "matricula": "A0090G02",
+        "nome": "GERENTE 2",
+        "email": "GERENTE2@0090.COM.BR",
+        "telefone": "(11) 1111-1111",
+        "tipoUsuario": "ATENDENTE",
+        "idTipoUsuario": 1,
+        "habilitado": true
+    }, {
+        "idUsuario": 10090703,
+        "matricula": "A0090G03",
+        "nome": "GERENTE 3",
+        "email": "GERENTE3@0090.COM.BR",
+        "telefone": "(11) 1111-1111",
+        "tipoUsuario": "MONITOR",
+        "idTipoUsuario": 2,
+        "habilitado": true
+    }, {
+        "idUsuario": 10090704,
+        "matricula": "A0090G04",
+        "nome": "GERENTE 4",
+        "email": "GERENTE4@0090.COM.BR",
+        "telefone": "(11) 1111-1111",
+        "tipoUsuario": "MONITOR",
+        "idTipoUsuario": 2,
+        "habilitado": true
+    }, {
+        "idUsuario": 10090705,
+        "matricula": "A0090G05",
+        "nome": "GERENTE 5 ",
+        "email": "GERENTE5@0090.COM.BR",
+        "telefone": "(11) 1111-1111",
+        "tipoUsuario": "MONITOR",
+        "idTipoUsuario": 2,
+        "habilitado": true
+    }],
+    "status": true
+}

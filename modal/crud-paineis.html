@@ -1,0 +1,41 @@
+<h3 id="modal_title">Painel</h3>
+<div class="content_modal">
+    <form action="" method="post" class="align_left">
+        
+        <input type="hidden" id="id" name="id" value="0">
+        
+        <div class="line">
+            <div class="col col50 align_left">
+                <h4>Hostname</h4>
+                <p>
+                    <input type="text" id="hostname" name="hostname">
+                </p>
+            </div><div class="col col50 align_left">
+                <h4>Mac Address Bluetooth</h4>
+                <p>
+                    <input type="text" id="macAddress" name="macAddress">
+                </p>
+            </div>
+            <div class="col col50 align_left">
+                <h4>Tipo Display</h4>
+                <p>
+                    <select name="tipoDisplay" id="tipoDisplay">
+                    </select>
+                </p>
+            </div><div class="col col50 align_left">
+                <h4>Status</h4>
+                <p>
+                    <select name="isAtivo" id="isAtivo">
+                        <option value="true">Ativo</option>
+                        <option value="false">Inativo</option>
+                    </select>
+                </p>
+            </div>
+        </div>
+        
+        <p class="align_right">
+            <input type="submit" name="fechar" id="cancelar" value="Cancelar"> <input type="submit" name="submit" value="Salvar">
+        </p>
+
+    </form>
+</div>

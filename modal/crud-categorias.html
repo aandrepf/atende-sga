@@ -1,0 +1,66 @@
+<h3 id="modal_title">Categoria</h3>
+<div class="content_modal">
+    <form action="" method="post" class="align_left">
+        
+        <input type="hidden" id="idUsuarioResponsavel" name="idUsuarioResponsavel" value="0">
+        <input type="hidden" id="idPainel1" name="idPainel1" value="0">
+        <input type="hidden" id="idPainel2" name="idPainel2" value="0">
+        <input type="hidden" id="idPainel3" name="idPainel3" value="0">
+        <input type="hidden" id="idPainel4" name="idPainel4" value="0">
+        
+        <input type="hidden" id="tipoCategoria" name="tipoCategoria" value="">
+        <input type="hidden" id="idCategoria" name="idCategoria" value="">
+        <input type="hidden" id="idLocalAtendimento" name="idLocalAtendimento" value="">
+        
+        <span class="col col100">
+            <h4>CATEGORIA *</h4>
+            <p>
+                <input type="text" id="nomeCategoria" name="nomeFila" readonly>
+            </p>
+        </span>
+        
+        <span class="col col33">
+            <h4>META/DIA (MIN) *</h4>
+            <p>
+                <input type="text" onkeypress="return isNumberKey(event)" id="metaDia" name="tmeMetaDia">
+            </p>
+        </span><span class="col col33">
+            <h4>ALERTA (% META) *</h4>
+            <p>
+                <input type="text" onkeypress="return isNumberKey(event)" id="minAmarelo" name="tminAmarelo">
+            </p>
+        </span><span class="col col33">
+            <h4>CRITICO (% META) *</h4>
+            <p>
+                <input type="text" onkeypress="return isNumberKey(event)" id="minVermelho" name="tminVermelho">
+            </p>
+        </span>
+            
+        <span class="col col50">
+            <h4>SENHA INICIAL *</h4>
+            <p>
+                <input type="text" id="rangeInicial" name="senhaIni" readonly>
+            </p>
+        </span><span class="col col50">
+            <h4>SENHA FINAL *</h4>
+            <p>
+                <input type="text" id="rangeFinal" name="senhaFim" readonly>
+            </p>
+        </span>
+        
+        <div class="col">
+            <h4>PAINEIS ATIVOS NESTA CATEGORIA (Clique nos paineis para remover)</h4>
+            <div id="showPaineis"></div>
+        </div>
+        
+        <span class="col">
+            <h4>PAINÉIS DISPONÍVEIS (Clique nos paineis para adicionar)</h4>
+            <div class="col paineis_disponiveis"></div>
+        </span>
+        
+        <p class="align_right">
+            <input type="submit" name="fechar" id="cancelar" value="Cancelar"> <input type="submit" name="submit" value="ATUALIZAR">
+        </p>
+
+    </form>
+</div>

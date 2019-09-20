@@ -1,0 +1,9 @@
+{
+    "tipoDisplay": [{
+        "id": 0,
+        "descricao": "N/A"
+    }, {
+        "id": 1,
+        "descricao": "Varejo"
+    }]
+}

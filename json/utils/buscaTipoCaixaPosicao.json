@@ -1,0 +1,27 @@
+{
+    "tipoCaixaPosicao": [{
+        "idTipoPosicao": 0,
+        "descricaotipoPosicao": "NA"
+    }, {
+        "idTipoPosicao": 1,
+        "descricaotipoPosicao": "CAIXA"
+    }, {
+        "idTipoPosicao": 2,
+        "descricaotipoPosicao": "GERENCIA"
+    }, {
+        "idTipoPosicao": 3,
+        "descricaotipoPosicao": "MESA"
+    }, {
+        "idTipoPosicao": 4,
+        "descricaotipoPosicao": "BALCAO"
+    }, {
+        "idTipoPosicao": 5,
+        "descricaotipoPosicao": "GUICHE"
+    }, {
+        "idTipoPosicao": 6,
+        "descricaotipoPosicao": "CAMBIO"
+    }, {
+        "idTipoPosicao": 7,
+        "descricaotipoPosicao": "TECNICO"
+    }]
+}

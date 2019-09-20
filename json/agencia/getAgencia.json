@@ -1,0 +1,15 @@
+{
+    "idAgencia": 10090,
+    "nomeAgencia": "AMERICANA\t",
+    "timeZone": "America/Bahia",
+    "msgTelaInicial": null,
+    "qtdVia": null,
+    "metaLegal": null,
+    "hrAbertura": 46800000,
+    "hrFechamento": 68400000,
+    "endereco": "RUA SETE DE SETEMBRO\t",
+    "nomeResponsavel": "ARIS",
+    "foneResponsavel": "(11) 1111-1111",
+    "emailResponsavel": "ARIS@ARIS.COM.BR",
+    "mensagemGerencial": null
+}

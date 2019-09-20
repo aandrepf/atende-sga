@@ -1,0 +1,939 @@
+{
+    "caixa": [{
+        "id": 4,
+        "hostname": "MANAH10",
+        "aliasCaixa": "04",
+        "tipoCaixa": "CAIXA",
+        "isLogado": false,
+        "politicaFormatada":"G[HI]{JKLM}OPDAB[EFC]",
+        "politicaCaixa": [{
+            "ordem": 0,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 45,
+                "tipoCategoria": "C ",
+                "nomeCategoria": "GERENCIA SANTANDER ESPECIAL"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 1,
+            "chamarAteFinal": true,
+            "categoria": {
+                "id": 42,
+                "tipoCategoria": "G ",
+                "nomeCategoria": "GERÊNCIA PESSOA FISICA PRIORITÁRIO"
+            },
+            "caracterRegra": [],
+            "numGrupoAtendimento": 1
+        }, {
+            "ordem": 2,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 43,
+                "tipoCategoria": "H ",
+                "nomeCategoria": "GERENCIA SANTANDER SELECT/PRIVATE"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 2
+        }, {
+            "ordem": 3,
+            "chamarAteFinal": true,
+            "categoria": {
+                "id": 44,
+                "tipoCategoria": "I ",
+                "nomeCategoria": "GERÊNCIA SANTANDER VAN GOGH"
+            },
+            "caracterRegra": [],
+            "numGrupoAtendimento": 3
+        }, {
+            "ordem": 4,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 46,
+                "tipoCategoria": "K ",
+                "nomeCategoria": "GERENCIA SANTANDER NEGOCIOS E EMPRESAS"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 4
+        }, {
+            "ordem": 5,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 47,
+                "tipoCategoria": "L ",
+                "nomeCategoria": "GERÊNCIA"
+            },
+            "caracterRegra": "{",
+            "numGrupoAtendimento": 5
+        }, {
+            "ordem": 6,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 48,
+                "tipoCategoria": "M ",
+                "nomeCategoria": "GERÊNCIA NEGÓCIOS E EMPRESAS PRIORITÁRIO"
+            },
+            "caracterRegra": "}",
+            "numGrupoAtendimento": 5
+        }, {
+            "ordem": 7,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 49,
+                "tipoCategoria": "N ",
+                "nomeCategoria": "GERÊNCIA PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 6
+        }, {
+            "ordem": 8,
+            "chamarAteFinal": true,
+            "categoria": {
+                "id": 50,
+                "tipoCategoria": "O ",
+                "nomeCategoria": "GERÊNCIA SANTANDER VAN GOGH PRIORITÁRIO"
+            },
+            "caracterRegra": "[{",
+            "numGrupoAtendimento": 7
+        }, {
+            "ordem": 9,
+            "chamarAteFinal": true,
+            "categoria": {
+                "id": 51,
+                "tipoCategoria": "P ",
+                "nomeCategoria": "GERENCIA SANTANDER SELECT/PRIVATE PRIORITÁRIO"
+            },
+            "caracterRegra": "}]",
+            "numGrupoAtendimento": 7
+        }],
+        "token": ""
+    }, {
+        "id": 5,
+        "hostname": "AG00900000C005",
+        "aliasCaixa": "05",
+        "tipoCaixa": "CAIXA",
+        "isLogado": false,
+        "politicaCaixa": [{
+            "ordem": 0,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 45,
+                "tipoCategoria": "C ",
+                "nomeCategoria": "GERENCIA SANTANDER ESPECIAL"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 1,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 42,
+                "tipoCategoria": "G ",
+                "nomeCategoria": "GERÊNCIA PESSOA FISICA PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 2,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 43,
+                "tipoCategoria": "H ",
+                "nomeCategoria": "GERENCIA SANTANDER SELECT/PRIVATE"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 3,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 44,
+                "tipoCategoria": "I ",
+                "nomeCategoria": "GERÊNCIA SANTANDER VAN GOGH"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 4,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 46,
+                "tipoCategoria": "K ",
+                "nomeCategoria": "GERENCIA SANTANDER NEGOCIOS E EMPRESAS"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 5,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 47,
+                "tipoCategoria": "L ",
+                "nomeCategoria": "GERÊNCIA"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 6,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 48,
+                "tipoCategoria": "M ",
+                "nomeCategoria": "GERÊNCIA NEGÓCIOS E EMPRESAS PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 7,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 49,
+                "tipoCategoria": "N ",
+                "nomeCategoria": "GERÊNCIA PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 8,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 50,
+                "tipoCategoria": "O ",
+                "nomeCategoria": "GERÊNCIA SANTANDER VAN GOGH PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 9,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 51,
+                "tipoCategoria": "P ",
+                "nomeCategoria": "GERENCIA SANTANDER SELECT/PRIVATE PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }],
+        "token": ""
+    }, {
+        "id": 6,
+        "hostname": "AG00900000G001",
+        "aliasCaixa": "06",
+        "tipoCaixa": "GERÊNCIA",
+        "isLogado": false,
+        "politicaCaixa": [{
+            "ordem": 0,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 45,
+                "tipoCategoria": "C ",
+                "nomeCategoria": "GERENCIA SANTANDER ESPECIAL"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 1,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 42,
+                "tipoCategoria": "G ",
+                "nomeCategoria": "GERÊNCIA PESSOA FISICA PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 2,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 43,
+                "tipoCategoria": "H ",
+                "nomeCategoria": "GERENCIA SANTANDER SELECT/PRIVATE"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 3,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 44,
+                "tipoCategoria": "I ",
+                "nomeCategoria": "GERÊNCIA SANTANDER VAN GOGH"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 4,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 46,
+                "tipoCategoria": "K ",
+                "nomeCategoria": "GERENCIA SANTANDER NEGOCIOS E EMPRESAS"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 5,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 47,
+                "tipoCategoria": "L ",
+                "nomeCategoria": "GERÊNCIA"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 6,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 48,
+                "tipoCategoria": "M ",
+                "nomeCategoria": "GERÊNCIA NEGÓCIOS E EMPRESAS PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 7,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 49,
+                "tipoCategoria": "N ",
+                "nomeCategoria": "GERÊNCIA PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 8,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 50,
+                "tipoCategoria": "O ",
+                "nomeCategoria": "GERÊNCIA SANTANDER VAN GOGH PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 9,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 51,
+                "tipoCategoria": "P ",
+                "nomeCategoria": "GERENCIA SANTANDER SELECT/PRIVATE PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }],
+        "token": ""
+    }, {
+        "id": 7,
+        "hostname": "AG00900000G002",
+        "aliasCaixa": "07",
+        "tipoCaixa": "GERÊNCIA",
+        "isLogado": false,
+        "politicaCaixa": [{
+            "ordem": 0,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 45,
+                "tipoCategoria": "C ",
+                "nomeCategoria": "GERENCIA SANTANDER ESPECIAL"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 1,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 42,
+                "tipoCategoria": "G ",
+                "nomeCategoria": "GERÊNCIA PESSOA FISICA PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 2,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 43,
+                "tipoCategoria": "H ",
+                "nomeCategoria": "GERENCIA SANTANDER SELECT/PRIVATE"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 3,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 44,
+                "tipoCategoria": "I ",
+                "nomeCategoria": "GERÊNCIA SANTANDER VAN GOGH"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 4,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 46,
+                "tipoCategoria": "K ",
+                "nomeCategoria": "GERENCIA SANTANDER NEGOCIOS E EMPRESAS"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 5,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 47,
+                "tipoCategoria": "L ",
+                "nomeCategoria": "GERÊNCIA"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 6,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 48,
+                "tipoCategoria": "M ",
+                "nomeCategoria": "GERÊNCIA NEGÓCIOS E EMPRESAS PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 7,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 49,
+                "tipoCategoria": "N ",
+                "nomeCategoria": "GERÊNCIA PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 8,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 50,
+                "tipoCategoria": "O ",
+                "nomeCategoria": "GERÊNCIA SANTANDER VAN GOGH PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 9,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 51,
+                "tipoCategoria": "P ",
+                "nomeCategoria": "GERENCIA SANTANDER SELECT/PRIVATE PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }],
+        "token": ""
+    }, {
+        "id": 8,
+        "hostname": "AG00900000G003",
+        "aliasCaixa": "08",
+        "tipoCaixa": "GERÊNCIA",
+        "isLogado": false,
+        "politicaCaixa": [{
+            "ordem": 0,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 45,
+                "tipoCategoria": "C ",
+                "nomeCategoria": "GERENCIA SANTANDER ESPECIAL"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 1,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 42,
+                "tipoCategoria": "G ",
+                "nomeCategoria": "GERÊNCIA PESSOA FISICA PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 2,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 43,
+                "tipoCategoria": "H ",
+                "nomeCategoria": "GERENCIA SANTANDER SELECT/PRIVATE"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 3,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 44,
+                "tipoCategoria": "I ",
+                "nomeCategoria": "GERÊNCIA SANTANDER VAN GOGH"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 4,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 46,
+                "tipoCategoria": "K ",
+                "nomeCategoria": "GERENCIA SANTANDER NEGOCIOS E EMPRESAS"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 5,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 47,
+                "tipoCategoria": "L ",
+                "nomeCategoria": "GERÊNCIA"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 6,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 48,
+                "tipoCategoria": "M ",
+                "nomeCategoria": "GERÊNCIA NEGÓCIOS E EMPRESAS PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 7,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 49,
+                "tipoCategoria": "N ",
+                "nomeCategoria": "GERÊNCIA PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 8,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 50,
+                "tipoCategoria": "O ",
+                "nomeCategoria": "GERÊNCIA SANTANDER VAN GOGH PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 9,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 51,
+                "tipoCategoria": "P ",
+                "nomeCategoria": "GERENCIA SANTANDER SELECT/PRIVATE PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }],
+        "token": ""
+    }, {
+        "id": 9,
+        "hostname": "AG00900000G004",
+        "aliasCaixa": "09",
+        "tipoCaixa": "GERÊNCIA",
+        "isLogado": false,
+        "politicaCaixa": [{
+            "ordem": 0,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 45,
+                "tipoCategoria": "C ",
+                "nomeCategoria": "GERENCIA SANTANDER ESPECIAL"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 1,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 42,
+                "tipoCategoria": "G ",
+                "nomeCategoria": "GERÊNCIA PESSOA FISICA PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 2,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 43,
+                "tipoCategoria": "H ",
+                "nomeCategoria": "GERENCIA SANTANDER SELECT/PRIVATE"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 3,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 44,
+                "tipoCategoria": "I ",
+                "nomeCategoria": "GERÊNCIA SANTANDER VAN GOGH"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 4,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 46,
+                "tipoCategoria": "K ",
+                "nomeCategoria": "GERENCIA SANTANDER NEGOCIOS E EMPRESAS"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 5,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 47,
+                "tipoCategoria": "L ",
+                "nomeCategoria": "GERÊNCIA"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 6,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 48,
+                "tipoCategoria": "M ",
+                "nomeCategoria": "GERÊNCIA NEGÓCIOS E EMPRESAS PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 7,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 49,
+                "tipoCategoria": "N ",
+                "nomeCategoria": "GERÊNCIA PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 8,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 50,
+                "tipoCategoria": "O ",
+                "nomeCategoria": "GERÊNCIA SANTANDER VAN GOGH PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 9,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 51,
+                "tipoCategoria": "P ",
+                "nomeCategoria": "GERENCIA SANTANDER SELECT/PRIVATE PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }],
+        "token": ""
+    }, {
+        "id": 10,
+        "hostname": "A0090G05",
+        "aliasCaixa": "10",
+        "tipoCaixa": "GERÊNCIA",
+        "isLogado": false,
+        "politicaCaixa": [{
+            "ordem": 0,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 45,
+                "tipoCategoria": "C ",
+                "nomeCategoria": "GERENCIA SANTANDER ESPECIAL"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 1,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 42,
+                "tipoCategoria": "G ",
+                "nomeCategoria": "GERÊNCIA PESSOA FISICA PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 2,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 43,
+                "tipoCategoria": "H ",
+                "nomeCategoria": "GERENCIA SANTANDER SELECT/PRIVATE"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 3,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 44,
+                "tipoCategoria": "I ",
+                "nomeCategoria": "GERÊNCIA SANTANDER VAN GOGH"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 4,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 46,
+                "tipoCategoria": "K ",
+                "nomeCategoria": "GERENCIA SANTANDER NEGOCIOS E EMPRESAS"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 5,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 47,
+                "tipoCategoria": "L ",
+                "nomeCategoria": "GERÊNCIA"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 6,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 48,
+                "tipoCategoria": "M ",
+                "nomeCategoria": "GERÊNCIA NEGÓCIOS E EMPRESAS PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 7,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 49,
+                "tipoCategoria": "N ",
+                "nomeCategoria": "GERÊNCIA PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 8,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 50,
+                "tipoCategoria": "O ",
+                "nomeCategoria": "GERÊNCIA SANTANDER VAN GOGH PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }, {
+            "ordem": 9,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 51,
+                "tipoCategoria": "P ",
+                "nomeCategoria": "GERENCIA SANTANDER SELECT/PRIVATE PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }],
+        "token": ""
+    }, {
+        "id": 2,
+        "hostname": "ARIS",
+        "aliasCaixa": "02",
+        "tipoCaixa": "CAIXA",
+        "isLogado": false,
+        "politicaCaixa": [{
+            "ordem": 0,
+            "chamarAteFinal": true,
+            "categoria": {
+                "id": 32,
+                "tipoCategoria": "A ",
+                "nomeCategoria": "CAIXA SANTANDER SELECT/PRIVATE"
+            },
+            "caracterRegra": [],
+            "numGrupoAtendimento": 1
+        }, {
+            "ordem": 1,
+            "chamarAteFinal": true,
+            "categoria": {
+                "id": 31,
+                "tipoCategoria": "B ",
+                "nomeCategoria": "CAIXA PRIORITÁRIO"
+            },
+            "caracterRegra": "[{",
+            "numGrupoAtendimento": 2
+        }, {
+            "ordem": 2,
+            "chamarAteFinal": true,
+            "categoria": {
+                "id": 35,
+                "tipoCategoria": "D ",
+                "nomeCategoria": "CAIXA SANTANDER NEGÓCIOS E EMPRESAS"
+            },
+            "caracterRegra": "}]",
+            "numGrupoAtendimento": 2
+        }, {
+            "ordem": 3,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 36,
+                "tipoCategoria": "E ",
+                "nomeCategoria": "CAIXA"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 3
+        }, {
+            "ordem": 4,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 33,
+                "tipoCategoria": "F ",
+                "nomeCategoria": "CAIXA SANTANDER VAN GOGH"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 4
+        }, {
+            "ordem": 5,
+            "chamarAteFinal": true,
+            "categoria": {
+                "id": 34,
+                "tipoCategoria": "J ",
+                "nomeCategoria": "CAIXA SANTANDER ESPECIAL"
+            },
+            "caracterRegra": [],
+            "numGrupoAtendimento": 5
+        }],
+        "token": ""
+    }, {
+        "id": 3,
+        "usuario": 71234,
+        "hostname": "71234",
+        "aliasCaixa": "03",
+        "tipoCaixa": "CAIXA",
+        "isLogado": true,
+        "politicaCaixa": [{
+            "ordem": 1,
+            "chamarAteFinal": true,
+            "categoria": {
+                "id": 42,
+                "tipoCategoria": "G ",
+                "nomeCategoria": "GERÊNCIA PESSOA FISICA PRIORITÁRIO"
+            },
+            "caracterRegra": "[",
+            "numGrupoAtendimento": 1
+        }, {
+            "ordem": 2,
+            "chamarAteFinal": true,
+            "categoria": {
+                "id": 43,
+                "tipoCategoria": "H ",
+                "nomeCategoria": "GERENCIA SANTANDER SELECT/PRIVATE"
+            },
+            "caracterRegra": "]",
+            "numGrupoAtendimento": 2
+        }, {
+            "ordem": 3,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 44,
+                "tipoCategoria": "I ",
+                "nomeCategoria": "GERÊNCIA SANTANDER VAN GOGH"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 3
+        }, {
+            "ordem": 4,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 46,
+                "tipoCategoria": "K ",
+                "nomeCategoria": "GERENCIA SANTANDER NEGOCIOS E EMPRESAS"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 4
+        }, {
+            "ordem": 5,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 47,
+                "tipoCategoria": "L ",
+                "nomeCategoria": "GERÊNCIA"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 5
+        }, {
+            "ordem": 6,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 48,
+                "tipoCategoria": "M ",
+                "nomeCategoria": "GERÊNCIA NEGÓCIOS E EMPRESAS PRIORITÁRIO"
+            },
+            "caracterRegra": "{",
+            "numGrupoAtendimento": 6
+        }, {
+            "ordem": 7,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 49,
+                "tipoCategoria": "N ",
+                "nomeCategoria": "GERÊNCIA PRIORITÁRIO"
+            },
+            "caracterRegra": "}",
+            "numGrupoAtendimento": 6
+        }, {
+            "ordem": 8,
+            "chamarAteFinal": true,
+            "categoria": {
+                "id": 50,
+                "tipoCategoria": "O ",
+                "nomeCategoria": "GERÊNCIA SANTANDER VAN GOGH PRIORITÁRIO"
+            },
+            "caracterRegra": [],
+            "numGrupoAtendimento": 7
+        }, {
+            "ordem": 9,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 51,
+                "tipoCategoria": "P ",
+                "nomeCategoria": "GERENCIA SANTANDER SELECT/PRIVATE PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 8
+        }, {
+            "ordem": 0,
+            "chamarAteFinal": false,
+            "categoria": {
+                "id": 31,
+                "tipoCategoria": "B ",
+                "nomeCategoria": "CAIXA PRIORITÁRIO"
+            },
+            "caracterRegra": "",
+            "numGrupoAtendimento": 0
+        }],
+        "token": "",
+        "dtLogado": "09/05/2019 11:55:05"
+    }],
+    "status": true
+}

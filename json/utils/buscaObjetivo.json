@@ -1,0 +1,39 @@
+{
+    "objetivo": [{
+        "codObjetivo": "A",
+        "objetivo": "CHEQUES (DEPÓSITOS E DEVOLUÇÕES)",
+        "idObjetivo": 450
+    }, {
+        "codObjetivo": "B",
+        "objetivo": "DEPÓSITOS",
+        "idObjetivo": 451
+    }, {
+        "codObjetivo": "C",
+        "objetivo": "PAGAMENTOS ACIMA DE 3 CONTAS",
+        "idObjetivo": 452
+    }, {
+        "codObjetivo": "D",
+        "objetivo": "PAGAMENTOS ATÉ 5 CONTAS",
+        "idObjetivo": 453
+    }, {
+        "codObjetivo": "E",
+        "objetivo": "RETIRADA CARTÕES",
+        "idObjetivo": 454
+    }, {
+        "codObjetivo": "F",
+        "objetivo": "SAQUES",
+        "idObjetivo": 455
+    }, {
+        "codObjetivo": "G",
+        "objetivo": "SAQUES ACIMA DE R$1000,00",
+        "idObjetivo": 456
+    }, {
+        "codObjetivo": "H",
+        "objetivo": "TALONÁRIO",
+        "idObjetivo": 457
+    }, {
+        "codObjetivo": "Z",
+        "objetivo": "OUTROS",
+        "idObjetivo": 458
+    }]
+}

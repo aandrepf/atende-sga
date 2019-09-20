@@ -1,0 +1,115 @@
+<div class="atendimento">
+    <div class="menu_atendimento">
+        <ul>
+            <li class="microfone"><a id="bt_chamar_voz" href="#"><img src="assets/img/microfone-mudo.png" alt=""></a></li>
+            <li><a id="bt_chamar" href="#">Chamar</a></li>
+            <li><a id="bt_rechamar" href="#">Rechamar</a></li>
+            <li><a id="bt_iniciar_atendimento" href="#">Iniciar Atendimento</a></li>
+            <li><a id="bt_redirecionar" href="#">Redirecionar</a></li>
+            <li><a id="bt_cancelar" href="#">Cancelar</a></li>
+            <li><a id="bt_descancelar" href="#">Descancelar</a></li>
+            <li><a id="bt_finalizar" href="#">Finalizar</a></li>
+            <li><a id="bt_suspender" href="#">Suspender</a></li>
+
+        </ul>
+        <div class="contador_tempo">
+            <i class="far fa-clock"></i>
+            <div id="timer" class="timer">
+                00:00:00
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div style="padding-right: 120px;">
+            <div class="box_shadow box_info_atendimento info_chamada">
+                <h3>Atendimento</h3>
+                <div class="info_content">
+                  <div class="line info-crm">
+
+                    <div class="col col70 align_left">
+                        <div id="col-nocrm">
+                            <p class="col align_left" id="col-nocrm"><strong>CLIENTE SEM INFORMAÇÕES</strong></p>
+                        </div>
+
+                       <div id="col-nome">
+                        <p class="col align_left" id="col-nome"><strong>Nome do Cliente: </strong><span class="col col50 align_left nome_value"></span></p>
+                       </div>
+
+                       <div id="col-documento">
+                        <p class="col align_left"><span class="documento_nome"><strong>CPF: </strong></span> <span class="col col50 align_left documento_value"></span></p>
+                       </div>
+
+                       <div id="col-correntista">
+                        <p class="col align_left"><span class="correntista_nome"><strong>Correntista: </strong></span> <span class="col col50 align_left correntista_value"></span></p>
+                       </div>
+
+                       <div id="col-segmento">
+                        <p class="col align_left"><span class="segmento_nome"><strong>Segmento: </strong></span> <span class="col col50 align_left segmento_value"></span></p>
+                       </div>
+                        
+                       <div id="col-ag">
+                        <p class="col align_left" id="col-ag"><strong>Agencia: </strong> <span class="col col50 align_left ag_value"></span></p>
+                       </div>
+
+                       <div id="col-cc">
+                        <p class="col align_left" id="col-cc"><strong>Conta: </strong> <span class="col col50 align_left cc_value"></span></p>
+                       </div>
+                    </div>
+                  </div>
+
+                  <div class="line">
+                    <div class="col col33 align_left">
+                        <strong>Nº Atendimento: </strong> <span class="n_atendimento_value"></span>
+                    </div><div class="col col33">
+                        <strong>Senha: </strong> <span class="senha_value"></span>
+                    </div><div class="col col33 align_right">
+                        <strong>Data: </strong> <span class="data_value"></span>
+                    </div>
+                  </div>
+
+                  <div class="line">
+                      <div class="col col50 align_left">Categoria</div><div class="col col50 align_right categoria_value"></div>
+                  </div>
+
+                  <div class="line">
+                    <div class="col col50 align_left senha_redirecionada" style="display: none;">
+                        <strong>Senha Redirecionada: </strong> <span>Sim</span>
+                    </div><div class="col col50 align_left senha_priorizada" style="display: none;">
+                        <strong>Senha Priorizada: </strong> <span>Sim</span>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="box_shadow box_info_atendimento info_inicio">
+                <h3>Informação Atendimento</h3>
+                <div class="info_content">
+
+                    <div class="line">
+                        <div class="col col50 align_left">
+                            <strong>Data/Hora Chamada: </strong> <span class="col col50 align_right date_call_value"></span>
+                        </div><div class="col col50 align_left">
+                            <strong>Data/Hora Início Atendimento: </strong> <span class="col col50 align_right date_init_value"></span>
+                        </div>
+                    </div>
+                    <div class="line">
+                        <div class="col col50 align_left">
+                            <strong>Tempo Espera: </strong> <span class="col col50 align_right wait_value"></span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="box_shadow box_info_atendimento info_obs">
+                <h3>Observações do Atendimento</h3>
+                <div class="info_content">
+                    <div class="line">
+                        <div class="col obs_value"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

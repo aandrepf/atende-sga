@@ -1,0 +1,18 @@
+{
+    "motivoSuspensao": [{
+        "id": 0,
+        "descricao": "---"
+    }, {
+        "id": 2,
+        "descricao": "SUPORTE ÁREA NEGOCIAL"
+    }, {
+        "id": 5,
+        "descricao": "OUTROS"
+    }, {
+        "id": 6,
+        "descricao": "SUPORTE TÉCNICO"
+    }, {
+        "id": 7,
+        "descricao": "ALMOÇO/LANCHE"
+    }]
+}

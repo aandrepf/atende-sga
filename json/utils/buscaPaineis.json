@@ -1,0 +1,97 @@
+{
+    "display": [{
+        "id": 1,
+        "hostname": "AG00900000Q502",
+        "tipoDisplay": 1,
+        "isAtivo": true,
+        "categoria": [{
+            "id": 3,
+            "tipoCategoria": "C ",
+            "nomeCategoria": "ABERTURA DE CONTA 80+"
+        }, {
+            "id": 7,
+            "tipoCategoria": "G ",
+            "nomeCategoria": "CARTOES PAGAMENTOS E SERVICOS UNICLASS PERSON"
+        }, {
+            "id": 8,
+            "tipoCategoria": "H ",
+            "nomeCategoria": "OUTROS PRODUTOS E SERVICOS GERAL"
+        }, {
+            "id": 9,
+            "tipoCategoria": "I ",
+            "nomeCategoria": "OUTROS PRODUTOS E SERVICOS PRI"
+        }, {
+            "id": 10,
+            "tipoCategoria": "J ",
+            "nomeCategoria": "OUTROS PRODUTOS E SERVICOS  80+"
+        }, {
+            "id": 11,
+            "tipoCategoria": "K ",
+            "nomeCategoria": "OUTROS PRODUTOS E SERVICOS UNICLASS PERSON GERAL"
+        }, {
+            "id": 12,
+            "tipoCategoria": "L ",
+            "nomeCategoria": "OUTROS PRODUTOS E SERVICOS UNICLASS PERSON PRI"
+        }, {
+            "id": 13,
+            "tipoCategoria": "M ",
+            "nomeCategoria": "OUTROS PRODUTOS E SERVICOS UNICLASS PERSON  80+"
+        }, {
+            "id": 14,
+            "tipoCategoria": "N ",
+            "nomeCategoria": "OUTROS PRODUTOS E SERVICOS EMPRESAS GERAL"
+        }, {
+            "id": 15,
+            "tipoCategoria": "O ",
+            "nomeCategoria": "OUTROS PRODUTOS E SERVICOS EMPRESAS PRI"
+        }, {
+            "id": 16,
+            "tipoCategoria": "P ",
+            "nomeCategoria": "OUTROS PRODUTOS E SERVICOS EMPRESAS  80+"
+        }, {
+            "id": 1,
+            "tipoCategoria": "A ",
+            "nomeCategoria": "ABERTURA DE CONTA GERAL"
+        }, {
+            "id": 2,
+            "tipoCategoria": "B ",
+            "nomeCategoria": "ABERTURA DE CONTA PRI"
+        }, {
+            "id": 4,
+            "tipoCategoria": "D ",
+            "nomeCategoria": "CARTOES PAGAMENTOS E SERVICOS GERAL"
+        }, {
+            "id": 5,
+            "tipoCategoria": "E ",
+            "nomeCategoria": "CARTOES PAGAMENTOS E SERVICOS PRI"
+        }, {
+            "id": 6,
+            "tipoCategoria": "F ",
+            "nomeCategoria": "CARTOES PAGAMENTOS E SERVICOS 80+"
+        }]
+    }, {
+        "id": 3,
+        "hostname": "172839",
+        "tipoDisplay": 1,
+        "isAtivo": true,
+        "categoria": []
+    }, {
+        "id": 2,
+        "hostname": "159159",
+        "tipoDisplay": 1,
+        "isAtivo": true,
+        "categoria": []
+    }, {
+        "id": 4,
+        "macAddress": "",
+        "hostname": "9879876",
+        "tipoDisplay": 1,
+        "isAtivo": false,
+        "categoria": [{
+            "id": 3,
+            "tipoCategoria": "C ",
+            "nomeCategoria": "ABERTURA DE CONTA 80+"
+        }]
+    }],
+    "status": true
+}

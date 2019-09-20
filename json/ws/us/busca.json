@@ -1,0 +1,122 @@
+{
+    "id": 3,
+    "usuario": 66661,
+    "hostname": "66661",
+    "aliasCaixa": "02",
+    "tipoCaixa": "MESA",
+    "isLogado": true,
+    "politica": [{
+        "ordem": 0,
+        "chamarAteFinal": false,
+        "categoria": {
+            "id": 1,
+            "tipoCategoria": "A",
+            "nomeCategoria": "ABERTURA DE CONTA GERAL"
+        },
+        "caracterRegra": "{",
+        "numGrupoAtendimento": 1
+    }, {
+        "ordem": 1,
+        "chamarAteFinal": false,
+        "categoria": {
+            "id": 2,
+            "tipoCategoria": "B",
+            "nomeCategoria": "ABERTURA DE CONTA PRI"
+        },
+        "caracterRegra": "",
+        "numGrupoAtendimento": 1
+    }, {
+        "ordem": 2,
+        "chamarAteFinal": false,
+        "categoria": {
+            "id": 3,
+            "tipoCategoria": "C",
+            "nomeCategoria": "ABERTURA DE CONTA 80+"
+        },
+        "caracterRegra": "",
+        "numGrupoAtendimento": 1
+    }, {
+        "ordem": 3,
+        "chamarAteFinal": false,
+        "categoria": {
+            "id": 4,
+            "tipoCategoria": "D",
+            "nomeCategoria": "CARTOES PAGAMENTOS E SERVICOS GERAL"
+        },
+        "caracterRegra": "}",
+        "numGrupoAtendimento": 1
+    }, {
+        "ordem": 4,
+        "chamarAteFinal": false,
+        "categoria": {
+            "id": 5,
+            "tipoCategoria": "E",
+            "nomeCategoria": "CARTOES PAGAMENTOS E SERVICOS PRI"
+        },
+        "caracterRegra": "",
+        "numGrupoAtendimento": 2
+    }, {
+        "ordem": 5,
+        "chamarAteFinal": false,
+        "categoria": {
+            "id": 6,
+            "tipoCategoria": "F",
+            "nomeCategoria": "CARTOES PAGAMENTOS E SERVICOS 80+"
+        },
+        "caracterRegra": "",
+        "numGrupoAtendimento": 3
+    }],
+    "politicaFormatada": "{ABCD}EF",
+    "token": "MzI0MDUyMDE5MDExMjI1NjY2NjEwMm51bGw=",
+    "dtLogado": "24/05/2019 01:12:25",
+    "politicaEmissor": "Normal",
+    "senhas": [{
+        "idCategoria": 1,
+        "total": 9
+    }, {
+        "idCategoria": 2,
+        "total": 2
+    }, {
+        "idCategoria": 3,
+        "total": 6
+    }, {
+        "idCategoria": 4,
+        "total": 2
+    }, {
+        "idCategoria": 5,
+        "total": 4
+    }, {
+        "idCategoria": 6,
+        "total": 4
+    }, {
+        "idCategoria": 7,
+        "total": 11
+    }, {
+        "idCategoria": 8,
+        "total": 0
+    }, {
+        "idCategoria": 9,
+        "total": 0
+    }, {
+        "idCategoria": 10,
+        "total": 6
+    }, {
+        "idCategoria": 11,
+        "total": 0
+    }, {
+        "idCategoria": 12,
+        "total": 0
+    }, {
+        "idCategoria": 13,
+        "total": 0
+    }, {
+        "idCategoria": 14,
+        "total": 0
+    }, {
+        "idCategoria": 15,
+        "total": 0
+    }, {
+        "idCategoria": 16,
+        "total": 2
+    }]
+}

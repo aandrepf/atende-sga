@@ -1,0 +1,92 @@
+{
+    "usuarioID": 66661,
+    "usuarioTipo": 2,
+    "usuarioTipoDesc": "MONITOR",
+    "emissorID": 3,
+    "usuarioNome": "GERENTE PF",
+    "emissorToken": "MzI0MDUyMDE5MDEzMDE0NjY2NjEwMm51bGw=",
+    "hostname": "66661",
+    "aliasCaixa": "02",
+    "politica": [{
+        "chamarFinal": false,
+        "tipoCategoria": "A ",
+        "ordem": 0,
+        "idCaixa": 3,
+        "idCategoria": 1,
+        "caracterRegra": "{",
+        "nomeCategoria": "ABERTURA DE CONTA GERAL"
+    }, {
+        "chamarFinal": false,
+        "tipoCategoria": "B ",
+        "ordem": 1,
+        "idCaixa": 3,
+        "idCategoria": 2,
+        "caracterRegra": "",
+        "nomeCategoria": "ABERTURA DE CONTA PRI"
+    }, {
+        "chamarFinal": false,
+        "tipoCategoria": "C ",
+        "ordem": 2,
+        "idCaixa": 3,
+        "idCategoria": 3,
+        "caracterRegra": "",
+        "nomeCategoria": "ABERTURA DE CONTA 80+"
+    }, {
+        "chamarFinal": false,
+        "tipoCategoria": "D ",
+        "ordem": 3,
+        "idCaixa": 3,
+        "idCategoria": 4,
+        "caracterRegra": "}",
+        "nomeCategoria": "CARTOES PAGAMENTOS E SERVICOS GERAL"
+    }, {
+        "chamarFinal": false,
+        "tipoCategoria": "E ",
+        "ordem": 4,
+        "idCaixa": 3,
+        "idCategoria": 5,
+        "caracterRegra": "",
+        "nomeCategoria": "CARTOES PAGAMENTOS E SERVICOS PRI"
+    }, {
+        "chamarFinal": false,
+        "tipoCategoria": "F ",
+        "ordem": 5,
+        "idCaixa": 3,
+        "idCategoria": 6,
+        "caracterRegra": "",
+        "nomeCategoria": "CARTOES PAGAMENTOS E SERVICOS 80+"
+    }, {
+        "chamarFinal": true,
+        "tipoCategoria": "G ",
+        "ordem": 6,
+        "idCaixa": 3,
+        "idCategoria": 7,
+        "caracterRegra": "[",
+        "nomeCategoria": "CARTOES PAGAMENTOS E SERVICOS UNICLASS PERSON"
+    }, {
+        "chamarFinal": true,
+        "tipoCategoria": "H ",
+        "ordem": 7,
+        "idCaixa": 3,
+        "idCategoria": 8,
+        "caracterRegra": "",
+        "nomeCategoria": "OUTROS PRODUTOS E SERVICOS GERAL"
+    }, {
+        "chamarFinal": true,
+        "tipoCategoria": "I ",
+        "ordem": 8,
+        "idCaixa": 3,
+        "idCategoria": 9,
+        "caracterRegra": "",
+        "nomeCategoria": "OUTROS PRODUTOS E SERVICOS PRI"
+    }, {
+        "chamarFinal": true,
+        "tipoCategoria": "J ",
+        "ordem": 9,
+        "idCaixa": 3,
+        "idCategoria": 10,
+        "caracterRegra": "]",
+        "nomeCategoria": "OUTROS PRODUTOS E SERVICOS  80+"
+    }],
+    "politicaFormatada": "{ABCD}EF[GHIJ]"
+}

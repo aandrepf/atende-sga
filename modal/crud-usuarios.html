@@ -1,0 +1,56 @@
+<h3 id="modal_title">Usuário</h3>
+<div class="content_modal">
+    <form action="" method="post" class="align_left">
+        
+        <input type="hidden" id="idUsuario" name="idUsuario" value="0">
+        <input type="hidden" id="idLocalAtendimento" name="idLocalAtendimento" value="0">
+        
+        <div class="line">
+            
+            <div class="col col50 align_left">
+                <h4>Matrícula</h4>
+                <p>
+                 <input type="text" id="matricula" name="matricula" maxlength="8" equired>
+                </p>
+            </div><div class="col col50 align_left">
+                <h4>Nome</h4>
+                <p>
+                    <input type="text" id="nome" name="nome" required>
+                </p>
+            </div><div class="col col50 align_left">
+                <h4>E-mail</h4>
+                <p>
+                    <input type="text" id="email" name="email" required>
+                </p>
+            </div><div class="col col50 align_left">
+                <h4>Telefone</h4>
+                <p>
+                    <input type="text" id="telefone" name="fone" required>
+                </p>
+            </div><div class="col col50 align_left">
+                <h4>Tipo</h4>
+                <p>
+                    <select id="idTipoUsuario" name="perfil" required>
+                        <option value=""></option>
+                        <option value="1">ATENDENTE</option>
+                        <option value="2">MONITOR</option>
+                    </select>
+                </p>
+            </div><div class="col col50 align_left">
+                <h4>Status</h4>
+                <p>
+                    <select name="habilitado" id="habilitado">
+                        <option value="true">Ativo</option>
+                        <option value="false">Inativo</option>
+                    </select>
+                </p>
+            </div>
+            
+        </div>
+        
+        <p class="align_right">
+            <input type="submit" name="fechar" id="cancelar" value="Cancelar"> <input type="submit" name="submit" value="Salvar">
+        </p>
+
+    </form>
+</div>

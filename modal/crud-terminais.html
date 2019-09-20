@@ -1,0 +1,46 @@
+<h3 id="modal_title">Terminal</h3>
+<div class="content_modal modal_terminal">
+    <form action="" method="post" class="align_left">        			
+        
+        <span class="col col50">
+            <h4>Hostname</h4>
+            <p>
+                <input type="text" maxlength="8" id="hostname" name="hostname" required>
+            </p>
+        </span><span class="col col50">
+            <h4>Tipo da Posição</h4>
+            <p>
+                <select id="tipoCaixa" name="tipoCaixa" required>
+                </select>
+            </p>
+        </span>
+        
+        <span class="col col50">
+            <h4>Posição</h4>
+            <p>
+                <input type="text" onkeypress="return isNumberKey(event)" id="aliasCaixa" name="aliasCaixa" required>
+            </p>
+        </span><span class="col col50">
+            <p>
+                Usuário Logado <input type="text" id="isLogado" name="isLogado" value="" readonly>
+            </p>
+        </span>
+        
+        <div class="col">
+            <h4>POLÍTICA DESTE ATENDENTE</h4>
+            <div id="statusPolitica"></div><div id="showPolitica"></div>
+        </div>
+        <span class="col">
+            <h4>TECLADO VIRTUAL</h4>
+            <div class="col" id="teclado_letras"></div>
+            <div class="col" id="teclado_tools"></div>
+            <div class="col"><a href="" class="limparUltimo">LIMPAR ÚLTIMO</a></div>
+        </span>
+        
+        
+        <p class="align_right">
+            <input type="submit" name="fechar" id="cancelar" value="Cancelar"> <input type="submit" name="submit" value="Salvar">
+        </p>
+
+    </form>
+</div>
