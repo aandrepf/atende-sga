@@ -1,6 +1,6 @@
 {
     "idAtendimento": 1898,
-    "categoria": 31,
+    "categoria": 7,
     "caixa": 3,
     "usuario": 71234,
     "objetivo": null,
@@ -20,8 +20,15 @@
     "ordem": 0,
     "idBotao": 2,
     "flgChamarFinal": false,
-    "nomeCategoria": "CAIXA PRIORITÁRIO",
-    "crm": [ "nome_cliente" : "Fábio"],
+    "nomeCategoria": "CONSIGNADO 80+",
+    "crm": {
+        "nome_cliente": "André Figueiredo",
+        "cpf": "01321047339",
+        "situacao": "Regular",
+        "segmento": "Uniclass",
+        "consignado": "S",
+        "correntista": true
+    },
     "dtImpressaoDate": 1556990068000,
     "dtChamadaDate": null
 }

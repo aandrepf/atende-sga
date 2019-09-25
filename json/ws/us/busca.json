@@ -66,13 +66,13 @@
         "caracterRegra": "",
         "numGrupoAtendimento": 3
     }],
-    "politicaFormatada": "{ABCD}EF",
+    "politicaFormatada": "AABBC",
     "token": "MzI0MDUyMDE5MDExMjI1NjY2NjEwMm51bGw=",
     "dtLogado": "24/05/2019 01:12:25",
     "politicaEmissor": "Normal",
     "senhas": [{
         "idCategoria": 1,
-        "total": 9
+        "total": 0
     }, {
         "idCategoria": 2,
         "total": 2
@@ -109,14 +109,5 @@
     }, {
         "idCategoria": 13,
         "total": 0
-    }, {
-        "idCategoria": 14,
-        "total": 0
-    }, {
-        "idCategoria": 15,
-        "total": 0
-    }, {
-        "idCategoria": 16,
-        "total": 2
     }]
 }

@@ -21,7 +21,14 @@
     "idBotao": 2,
     "flgChamarFinal": false,
     "nomeCategoria": "CAIXA PRIORITÁRIO",
-    "crm": "{\"agencia\":\"\",\"cnpj\":\"\",\"cpf\":\"\",\"nomeCliente\":\"\",\"conta\":\"\",\"tipoIdentificacao\":1}",
+    "crm": {
+        "nome_cliente": "André Figueiredo",
+        "cpf": "01321047339",
+        "situacao": "Regular",
+        "segmento": "Uniclass",
+        "consignado": "S",
+        "correntista": true
+    },
     "dtImpressaoDate": 1556990068000,
     "dtChamadaDate": null
 }
