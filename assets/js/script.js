@@ -18,11 +18,11 @@ var IDENTIFICACAO;
 var FIDELIZE = true;
 var USAFOTO = false;
 
-var DEBUG = 0;
+var DEBUG = 2;
 
-print('V 1.3.13');
+print('V 1.3.16');
 
-if(DEBUG == 2){
+if(DEBUG == 0){
     BASE_URL    = 'json/';
     suffix      = '.json';
 }else if(DEBUG == 1){
@@ -376,43 +376,51 @@ function busca(){
             var initilizer = 0;
 
             // TOTAL DA AGENCIA
-            var total_agencia = data.senhas.map(function(item) {
+            var total_agencia = $.map(data.senhas, function(item) {
                 return item.total
-            }).reduce(function(acumulado, atual){
-                return acumulado + atual;
-            }, initilizer);
-            $('.espera_agencia .count').html(total_agencia);
+            });
 
-            var arrayCatPolitica = data.politica.map(function(item){
+            var soma_agencia = 0;
+            for (var i = 0; i < total_agencia.length; i++) {
+                soma_agencia += total_agencia[i];
+            }
+
+            $('.espera_agencia .count').html(soma_agencia);
+
+            var arrayCatPolitica = $.map(data.politica, function(item){
                 return item.categoria.id;
             });
 
-            var nArrayCatPolitica = arrayCatPolitica.filter(function(item, i){
-                return arrayCatPolitica.indexOf(item) === i;
+            var nArrayCatPolitica = $(arrayCatPolitica).filter(function(i, item){
+                return $.inArray( item, arrayCatPolitica );
             });
 
             var fila = [];
-            nArrayCatPolitica.forEach(function(item){
-                fila.push(data.senhas.filter(function(senha){
+            $.each(nArrayCatPolitica.prevObject, function(i, item){
+                fila.push($(data.senhas).filter(function(i, senha){
                     return senha.idCategoria === item;
                 })[0]);
             });
 
             //TOTAL ATENDENTE
-            var total_atendente = fila.map(function(item){
+            var total_atendente = $.map(fila, function(item){
                 return item.total;
-            }).reduce(function(acumulado, atual){
-                return acumulado + atual;
-            }, initilizer);
-            $('.espera_atendente .count').html(total_atendente);
+            });
+
+            var soma_atendente = 0;
+            for (var i = 0; i < total_atendente.length; i++) {
+                soma_atendente += total_atendente[i];
+            }
+
+            $('.espera_atendente .count').html(soma_atendente);
 
             if(lastAction == 'descancelar'){
               ativar('bt_chamar_voz, bt_rechamar, bt_iniciar_atendimento, bt_cancelar');
             }else if(lastAction == 'cancelar'){
               ativar('bt_chamar_voz, bt_chamar, bt_descancelar, bt_suspender');
-            }else if( (total_atendente>0) && emAtendimento == false){
+            }else if( (soma_atendente>0) && emAtendimento == false){
               ativar('bt_chamar_voz, bt_chamar, bt_suspender');
-            }else if( (total_atendente == 0) && emAtendimento == false){
+            }else if( (soma_atendente == 0) && emAtendimento == false){
               ativar('bt_suspender');
             }
         }else{
@@ -707,7 +715,7 @@ function openModalRedirecionar(data) {
   $('.modal .modal_content').load('modal/redirecionar.html', function(){
     var html_categorias = '';
     var split = nomeCatAtendimento.split(' ');
-    var filtroCategorias = data.categoria.filter(function(item) {
+    var filtroCategorias = $(data.categoria).filter(function(i, item) {
         return item.nomeCategoria.indexOf(split[split.length -1]) !== -1 && item.idCategoria !== catAtendimento;
     });
 
@@ -1431,7 +1439,7 @@ function makeSelected(painel) {
     var painelEscolhido = document.createElement("div");
     painelEscolhido.className = painel.className;
     painelEscolhido.id = painel.id;
-    painelEscolhido.dataset.id = painel.dataset.id;
+    painelEscolhido.dataset.id = $(painel).data('id');
     painelEscolhido.dataset.state = 'disponivel';
     painelEscolhido.innerHTML = painel.innerHTML;
 
@@ -1445,11 +1453,9 @@ function makeSelected(painel) {
     document.getElementById("showPaineis").appendChild(painelEscolhido);
     var lista = document.getElementById('showPaineis').childNodes;
     var idPainel = [];
-    lista.forEach(function(item){
-        console.log('ID', item.dataset.id);
-        idPainel.push(item.dataset.id);
+    $.each(lista, function(k,item){
+        idPainel.push($(item).data('id'));
     });
-    console.log('LISTA ADICIONADO', idPainel);
     for(var i=0; i<idPainel.length; i++){
         $('#idPainel'+(i+1).toString()).val(idPainel[i]);
     }
@@ -1461,7 +1467,7 @@ function makeDisponivel(painel){
     var painelDisponivel = document.createElement("div");
     painelDisponivel.className = painel.className;
     painelDisponivel.id = painel.id;
-    painelDisponivel.dataset.id = painel.dataset.id;
+    painelDisponivel.dataset.id = $(painel).data('id');
     painelDisponivel.dataset.state = 'disponivel';
     painelDisponivel.innerHTML = painel.innerHTML;
 
@@ -1479,8 +1485,8 @@ function makeDisponivel(painel){
     });
 
     var newAtivos  = [];
-    ativos.forEach(function(i, index){
-        if(i === painel.dataset.id) {
+    $.each(ativos, function(i, index){
+        if(index === $(painel).data('id')) {
             i = '0';
         }
         newAtivos.push(i);
@@ -1741,12 +1747,12 @@ function getCategorias(){
                         var paineis_escolhidos = '';
                         var lpaineisDisponiveis = [];
                         var lpaineisEscolhidos = [];
-                        paineisAtivos.forEach(function(item){
-                            lpaineisDisponiveis = data.display.filter(function(painel){
+                        $.each(paineisAtivos, function(k, item){
+                            lpaineisDisponiveis = $.grep(data.display, function(painel, i){
                                 return painel.id !== item;
                             });
-                            lpaineisEscolhidos = data.display.filter(function(painel){
-                                return painel.id === item;
+                            lpaineisEscolhidos = $.grep(data.display, function(painel, i){
+                                return painel.id == item;
                             });
                         });
                         if (typeof data != undefined && lpaineisDisponiveis.length > 0) {
@@ -1769,9 +1775,11 @@ function getCategorias(){
 
                         var lista = $escolhidos.childNodes;
                         var idPainel = [];
-                        lista.forEach(function(item){
-                            idPainel.push(item.dataset.id);
+                        $.each(lista, function(k,item){
+                            idPainel.push($(item).data('id'));
                         });
+
+                        console.log('idPainel', idPainel);
                         for(var i=0; i<idPainel.length; i++){
                             $('#idPainel'+(i+1).toString()).val(idPainel[i]);
                         }
@@ -1820,7 +1828,6 @@ function getCategorias(){
                             "porcentagemExclusaoAtendimento"    : 0,
                             "idUsuarioResponsavel"              : currentUser.usuarioID
                         };
-                        console.log(formData);
 
                         //ENVIA DADOS DA CATEGORIA EDITADA
                         $.ajax({
