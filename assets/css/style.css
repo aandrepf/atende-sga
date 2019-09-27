@@ -494,10 +494,6 @@ html {
 
 #logo {
   float: left;
-  width: 175px;
-  height: 35px;
-  background: url("../img/sga.png") no-repeat;
-  background-size: 60%;
 }
 
 .card_terminal {
@@ -541,7 +537,7 @@ html {
 #footer span.count {
   background: #333;
   line-height: 20px;
-  width: 20px;
+  width: 30px;
   text-align: center;
   display: inline-block;
   -webkit-border-radius: 3px;
@@ -773,12 +769,12 @@ span.nome_value, span.documento_value, span.ag_value, span.cc_value {
   padding: 10px 15px;
   line-height: 1;
   border-radius: 30px;
-  background: rgba(0, 0, 0, 0.3);
+  background: #999;
   color: #FFF;
 }
 
 .bt_painel a:hover {
-  background: rgba(0, 0, 0, 0.6);
+  background: #666;
 }
 
 /* TERMINAL */

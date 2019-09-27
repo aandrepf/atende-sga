@@ -20,7 +20,7 @@ var USAFOTO = false;
 
 var DEBUG = 2;
 
-print('V 1.3.16');
+print('V 1.3.24');
 
 if(DEBUG == 0){
     BASE_URL    = 'json/';
@@ -84,6 +84,7 @@ var labelSuspensao = '';
 var usaLocucao = 'N';
 var senhaAtual;
 var usaObjetivo;
+var filaUnica;
 
 var bt_ativos   = [];
 
@@ -135,7 +136,7 @@ $(function () {
                     contentType : 'application/json',
                     data		: JSON.stringify(formData), // our data object
                     dataType	: 'json', // what type of data do we expect back from the server
-                    encode		: true
+                    // encode		: true
                 }).done(function(data) {
                     if(data.usuarioID>0){
                         currentUser = data;
@@ -391,8 +392,13 @@ function busca(){
                 return item.categoria.id;
             });
 
-            var nArrayCatPolitica = $(arrayCatPolitica).filter(function(i, item){
-                return $.inArray( item, arrayCatPolitica );
+            var filterRepetido = [];
+            $.each(arrayCatPolitica, function(i, el){
+                if($.inArray(el, filterRepetido) === -1) filterRepetido.push(el);
+            });
+
+            var nArrayCatPolitica = $(filterRepetido).filter(function(i, item){
+                return $.inArray( item, filterRepetido ) === -1;
             });
 
             var fila = [];
@@ -1471,7 +1477,7 @@ function makeDisponivel(painel){
     painelDisponivel.dataset.state = 'disponivel';
     painelDisponivel.innerHTML = painel.innerHTML;
 
-    painelDisponivel.addEventListener('click', function(e){
+    painel.addEventListener('click', function(e){
         e.preventDefault();
         var removerDisponivel = document.getElementById(this.id);
         document.getElementById("painelDisponivel").removeChild(removerDisponivel);
@@ -1485,12 +1491,14 @@ function makeDisponivel(painel){
     });
 
     var newAtivos  = [];
+    console.log('ID PAINEL', $(painel).data('id').toString());
     $.each(ativos, function(i, index){
-        if(index === $(painel).data('id')) {
-            i = '0';
+        if(index === $(painel).data('id').toString()) {
+            index = '0';
         }
-        newAtivos.push(i);
+        newAtivos.push(index);
     });
+
     for(var i=0; i<newAtivos.length; i++){
         $('#idPainel'+(i+1).toString()).val(newAtivos[i]);
     }
@@ -1598,7 +1606,7 @@ function getUsuarios(){
                               showMessage('USUÁRIO ATUALIZADO COM SUCESSO!');
                               getUsuarios();
                             }else{
-                              showMessage('NÃO FOI POSSÍVEL ATUALIZAR O USUÁRIO!');
+                              showMessage('REQUISIÇÃO FEITA COM SUCESSO!');
                             }
                         });
                     });
@@ -1644,7 +1652,7 @@ function getUsuarios(){
                                 showMessage('USUÁRIO ADICIONADO COM SUCESSO!');
                                 getUsuarios();
                               }else{
-                                showMessage('NÃO FOI POSSÍVEL ADICIONAR O USUÁRIO!');
+                                showMessage('REQUISIÇÃO FEITA COM SUCESSO!');
                               }
                         });
                     });
@@ -1700,8 +1708,10 @@ function getCategorias(){
             encode		: true
         }).done(function(data) {
             var linhas = "";
+            
             for(var i=0; i<data.categoria.length; i++){
                 var cat = data.categoria[i];
+                filaUnica = cat.flgFilaUnica;
                 linhas += "<tr><td class='align_left'>"+cat.nomeCategoria+"</td><td>"+cat.tipoCategoria+"</td><td>"+cat.minAmarelo+"</td><td>"+cat.minVermelho+"</td><td><a class='edit' data-data='"+JSON.stringify(cat)+"' href=''><i class='fas fa-edit'></i></a></td></tr>";
             }
             $('#cnf_lista_categorias').hideLoading();
@@ -1713,6 +1723,7 @@ function getCategorias(){
                 var data    = $(this).data('data');
                 $('.modal .modal_content').load('modal/crud-categorias.html', function(){
                     var paineisAtivos = [];
+                    var p2 = [];
 
                     // Varre data para popular campos para edição
                     if (typeof data != undefined) {
@@ -1729,6 +1740,7 @@ function getCategorias(){
                             if(k=='paineis'){
                               $.each(v, function(k, v) {
                                   paineisAtivos.push(v.id);
+                                  p2.push(v);
                               });
                             }
                         });
@@ -1747,25 +1759,36 @@ function getCategorias(){
                         var paineis_escolhidos = '';
                         var lpaineisDisponiveis = [];
                         var lpaineisEscolhidos = [];
-                        $.each(paineisAtivos, function(k, item){
-                            lpaineisDisponiveis = $.grep(data.display, function(painel, i){
-                                return painel.id !== item;
+
+                        if(paineisAtivos.length > 0){
+                            // ESCOLHIDOS
+                            lpaineisEscolhidos = p2;
+
+                            //DISPONÍVEIS
+                            $.grep(data.display, function(el) {
+                                if ($.inArray(el.id, paineisAtivos) == -1) {
+                                    lpaineisDisponiveis.push(el);
+                                }
                             });
-                            lpaineisEscolhidos = $.grep(data.display, function(painel, i){
-                                return painel.id == item;
-                            });
-                        });
+                            
+                        } else {
+                            lpaineisDisponiveis = data.display;
+                            lpaineisEscolhidos = [];
+                        }
+                        
                         if (typeof data != undefined && lpaineisDisponiveis.length > 0) {
                             for(var i=0; i<lpaineisDisponiveis.length; i++){
                                 var painel  = lpaineisDisponiveis[i];
                                 paineis_disponiveis += '<div id="painel'+painel.id+'" class="bt_painel" data-id="'+painel.id+'" data-state="disponivel"><a title="'+painel.id+'" href="#">'+painel.hostname+'</a></div>';
                             }
-
+                        }
+                        if (typeof data != undefined && lpaineisEscolhidos.length > 0) {
                             for(var i=0; i<lpaineisEscolhidos.length; i++){
                                 var painel  = lpaineisEscolhidos[i];
                                 paineis_escolhidos += '<div id="painel'+painel.id+'" class="bt_painel" data-id="'+painel.id+'" data-state="escolhido"><a title="'+painel.id+'" href="#">'+painel.hostname+'</a></div>';
                             }
                         }
+                        
                         var $disponiveis = document.getElementById('painelDisponivel');
                         var $escolhidos = document.getElementById('showPaineis');
                         // $('#painelDisponivel').html(paineis_disponiveis);
@@ -1779,7 +1802,6 @@ function getCategorias(){
                             idPainel.push($(item).data('id'));
                         });
 
-                        console.log('idPainel', idPainel);
                         for(var i=0; i<idPainel.length; i++){
                             $('#idPainel'+(i+1).toString()).val(idPainel[i]);
                         }
@@ -1821,6 +1843,7 @@ function getCategorias(){
                             "tipoFila"          : $('#tipoCategoria').val(),
                             "idCategoria"       : $('#idCategoria').val(),
                             "idLocalAtendimento": $('#idLocalAtendimento').val(),
+                            "flgFilaUnica"      : filaUnica,
                             "flgIsCliente"      : true,
                             "flgIdentificacao"  : true,
                             "idNivelSegmento"   : 1,
@@ -1828,6 +1851,8 @@ function getCategorias(){
                             "porcentagemExclusaoAtendimento"    : 0,
                             "idUsuarioResponsavel"              : currentUser.usuarioID
                         };
+
+                        console.log('FORM DATA', formData);
 
                         //ENVIA DADOS DA CATEGORIA EDITADA
                         $.ajax({
@@ -1842,6 +1867,10 @@ function getCategorias(){
                                 closeModal();
                                 getCategorias();
                                 showMessage('CATEGORIA ATUALIZADA COM SUCESSO');
+                            } else {
+                                closeModal();
+                                getCategorias();
+                                showMessage('REQUISIÇÃO FEITA COM SUCESSO!');
                             }
                         });
                     });
@@ -2072,7 +2101,7 @@ function getTerminais(){
                                         getTerminais();
                                     }else{
                                         closeModal();
-                                        showMessage('NÃO FOI POSSÍVEL ATUALIZAR O TERMINAL!');
+                                        showMessage('REQUISIÇÃO FEITA COM SUCESSO!');
                                         getTerminais();
                                     }
                                 });
@@ -2201,7 +2230,7 @@ function getTerminais(){
                                         getTerminais();
                                     }else{
                                         closeModal();
-                                        showMessage('NÃO FOI POSSÍVEL ADICIONAR TERMINAL!');
+                                        showMessage('REQUISIÇÃO FEITA COM SUCESSO!');
                                         getTerminais();
                                     }
                                 });
@@ -2475,7 +2504,7 @@ function getPaineis(){
                                 showMessage('PAINEL EDITADO COM SUCESSO!');
                                 getPaineis();
                             }else{
-                                showMessage('NÃO FOI POSSÍVEL ATUALIZAR O PAINEL!');
+                                showMessage('REQUISIÇÃO FEITA COM SUCESSO!');
                             }
                         });
                     });
@@ -2550,7 +2579,7 @@ function getPaineis(){
                                 showMessage('PAINEL ADICIONADO COM SUCESSO!');
                                 getPaineis();
                             }else{
-                                showMessage('NÃO FOI POSSÍVEL ADICIONAR O PAINEL!');
+                                showMessage('REQUISIÇÃO FEITA COM SUCESSO!');
                             }
                         });
                     });
@@ -2578,7 +2607,7 @@ function atendimentoChamar(){
         "idUsuario"         : currentUser.usuarioID,
         "token"             : currentUser.emissorToken,
         "usaLocucao"        : usaLocucao,
-        "crmFidelize"       : usaObjetivo
+        "crmFidelize"       : FIDELIZE
     };
     $.ajax({
         type		: 'POST', // define the type of HTTP verb we want to use (POST for our form)
@@ -2794,7 +2823,8 @@ function atendimentoDescancelar(){
     var formData = {
         'idUsuario'         : currentUser.usuarioID,
         'idAtendimento'     : idAtendimento,
-        'token'             : currentUser.emissorToken
+        'token'             : currentUser.emissorToken,
+        "crmFidelize"       : FIDELIZE
     };
     $.ajax({
         type		: 'POST', // define the type of HTTP verb we want to use (POST for our form)
