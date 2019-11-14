@@ -7,6 +7,7 @@
     "emissorToken": "MzI0MDUyMDE5MDEzMDE0NjY2NjEwMm51bGw=",
     "hostname": "66661",
     "aliasCaixa": "02",
+    "flgObjetivo": false,
     "politica": [{
         "chamarFinal": false,
         "tipoCategoria": "A ",
