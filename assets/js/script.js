@@ -18,9 +18,9 @@ var IDENTIFICACAO;
 var FIDELIZE = false;
 var USAFOTO = true;
 
-var DEBUG = 0;
+var DEBUG = 2;
 
-print('V 1.3.24');
+print('V 1.4.0');
 
 if(DEBUG == 0){
     BASE_URL    = 'json/';
@@ -36,7 +36,7 @@ if(DEBUG == 0){
 }else{
     if (isWeb) {
         // BASE_URL = 'http://237SGAMOBILE:8080/';
-        // BASE_URL = location.protocol + '//' + location.host.split(':')[0] + ':8080/';
+        BASE_URL = location.protocol + '//' + location.host.split(':')[0] + ':8080/';
     } else {
         protocol = retorno.ssl ? 'https:' : 'http:';
         BASE_URL = protocol + '//' + retorno.endpoint + '/';
@@ -122,18 +122,18 @@ $(function () {
                     }, 1000);
                     return false;
                 }
-                if($('#terminal').val()==''){
+                /* if($('#terminal').val()==''){
                     setTimeout(function(){
-                        showMessage('Informe o nome do terminal');
+                        $('#terminal').val($('#matricula').val());
                         $('#main').hideLoading();
                     }, 1000);
                     return false;
-                }
+                } */
                 // $('#login').append('<div class="overlay" style="position:absolute; width:100%;height: 100%; top:0;left:0; background:#FAFAFA; display:none;"></div>');//css({'opacity':.6});
                 // $('#login .overlay').fadeTo( "fast", 0.5 );
 
                 var formData = {
-                    "hostname"  : $('#terminal').val().toUpperCase(),
+                    "hostname"  : $('#terminal').val() !== '' ? $('#terminal').val().toUpperCase() : $('#matricula').val().toUpperCase(),
                     "matricula" : $('#matricula').val().toUpperCase()
                 };
 
@@ -164,7 +164,7 @@ $(function () {
                         showMessage(data.error);
                     }else{
                         // showForceLogoff($('#matricula').val()); // MÉTODO ORIGINAL 11/11/2019 - 17:29 - André Figueiredo
-                        showForceLogoff($('#matricula').val().toUpperCase(), $('#terminal').val().toUpperCase())
+                        showForceLogoff($('#matricula').val().toUpperCase(), $('#terminal').val() !== '' ? $('#terminal').val().toUpperCase() : $('#matricula').val().toUpperCase())
                         showMessage(data.error);
                     }
                     // $('#login .overlay').fadeOut( "fast" );
@@ -238,7 +238,7 @@ function showForceLogoff(matricula, terminal) {
         });
 
         var matriculaUppercase = matricula.toUpperCase();
-        var terminalUppercase = terminal.toUpperCase(); // INCLUIDO em 11/11/2019 - 17:31 - André Figueiredo - LEMBREAE DE ALTERAR
+        var terminalUppercase = terminal.toUpperCase(); // INCLUIDO em 11/11/2019 - 17:31 - André Figueiredo - LEMBREAR DE ALTERAR
 
         $('form').submit(function(e){
             e.preventDefault();
@@ -2255,7 +2255,15 @@ function getTerminais(){
 
 // ADICIONA NA TAG QUE MOSTRA A POLITICA O ELEMENTO QUE FOI CLICADO
 function addElement(elem){
-    $(elem).clone().appendTo("#showPolitica");
+    
+    if(elem.innerHTML.length > 1) {
+        var nElem = $(elem).clone();
+        nElem[0].innerHTML = '('+elem.innerHTML+')';
+        $(nElem[0].outerHTML).appendTo('#showPolitica');
+    } else {
+        $(elem).clone().appendTo("#showPolitica");
+    }
+
     $("#showPolitica button").attr("disabled", true);
     // MOSTRA UM X ou UM CHECK INDICADO CONFIGURAÇÃO CORRETA
     if(!verificaPolitica()){
@@ -2278,6 +2286,7 @@ function removeElement(){
 // VERIFICA A CONFIGURAÇÃO DA POLITICA
 function verificaPolitica(){
     var strAtual = $("#showPolitica button").text();
+    console.log('POLITICA', strAtual);
     if(strAtual.indexOf('/') != -1 || strAtual.indexOf('!') != -1){
       ativarTeclado('bt_barra, bt_exclamacao');
       return true;
@@ -2308,8 +2317,11 @@ function verificaPolitica(){
         if(spl.length>1){
             var last1 = spl[spl.length-1];
             var last2 = spl[spl.length-2];
+
+            console.log('LAST 1', last1, '\nLAST 2', last2, '\nCHAVE', chav, '\nCOLCHETE', colc);
+
             if(chav){
-                if(last2.match(/[A-Z]/i) && last1.match(/[A-Z]/i)){
+                if(last2.match(/[A-Z\)]/i) && last1.match(/[A-Z\)]/i)){
                     ativarTeclado('bt_chaveFecha');
                     return false;
                 }else{
@@ -2319,7 +2331,7 @@ function verificaPolitica(){
             }
 
             if(colc){
-                if(last1.match(/[A-Z]/i) || last1 == '}'){
+                if(last1.match(/[A-Z\)]/i) || last1 == '}'){
                     if(!chav){
                         ativarTeclado('bt_chaveAbre, bt_colcheteFecha');
                         return false;
@@ -3015,7 +3027,6 @@ function print(data){
 
 // VERIFICA SE O QUE FOI DIGITADO É UM NUMERO OU NÃO
 function isNumberKey(evt){
-   console.log('event', evt);
    var charCode = (evt.which) ? evt.which : event.keyCode
    if (charCode > 31 && (charCode < 48 || charCode > 57))
       return false;
