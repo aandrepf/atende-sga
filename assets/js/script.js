@@ -16,11 +16,11 @@ var AGENCIA;
 var IDENTIFICACAO;
 
 var FIDELIZE = false;
-var USAFOTO = true;
+var USAFOTO = false;
 
 var DEBUG = 2;
 
-print('V 1.4.0');
+print('V 1.5.2');
 
 if(DEBUG == 0){
     BASE_URL    = 'json/';
@@ -35,7 +35,6 @@ if(DEBUG == 0){
     suffix = '';
 }else{
     if (isWeb) {
-        // BASE_URL = 'http://237SGAMOBILE:8080/';
         BASE_URL = location.protocol + '//' + location.host.split(':')[0] + ':8080/';
     } else {
         protocol = retorno.ssl ? 'https:' : 'http:';
@@ -137,6 +136,8 @@ $(function () {
                     "matricula" : $('#matricula').val().toUpperCase()
                 };
 
+                console.log(formData);
+
                 // LOGIN
                 $.ajax({
                     type		: 'POST', // define the type of HTTP verb we want to use (POST for our form)
@@ -144,7 +145,7 @@ $(function () {
                     contentType : 'application/json',
                     data		: JSON.stringify(formData), // our data object
                     dataType	: 'json', // what type of data do we expect back from the server
-                    // encode		: true
+                    encode		: true
                 }).done(function(data) {
                     if(data.usuarioID>0){
                         currentUser = data;
@@ -257,8 +258,8 @@ function showForceLogoff(matricula, terminal) {
             }).done(function(data) {
                 if(data.logoff == true){
                     var formData = {
-                        "hostname"  : matriculaUppercase,
-                        "matricula" : terminalUppercase
+                        'matricula' : matriculaUppercase,
+                        'hostname'  : terminalUppercase
                     };
 
                     // FAZ NOVAMENTE O LOGIN DO USUARIO NA ESTAÇÃO ATUAL
@@ -454,7 +455,6 @@ function contagemBuscaStart(){
 function contagemBuscaStop(){
   clearInterval(contadorBusca);
 }
-
 // EXECUTA O SERVIÇO DE MONITORAMENTO DAS CATEGORIAS
 function contagemCategoriasStart(){
     contadorCategorias = setInterval(reloadCategoriasList, tempoCategorias);
@@ -463,7 +463,6 @@ function contagemCategoriasStart(){
 function contagemCategoriasStop(){
     clearInterval(contadorCategorias);
 }
-
 // DESATIVA O RECHAMAR
 function desativaRechamar(){
   contadorRechamar = setInterval(reativarRechamar, tempoReativar);
@@ -477,7 +476,6 @@ function reativarRechamar(){
   ativar('bt_chamar_voz, bt_rechamar, bt_iniciar_atendimento, bt_cancelar');
   reativaRechamar();
 }
-
 // CONTADOR DE SENHAS
 function contagemSenhasStart(){
     contadorSenhas = setInterval(reloadSenhasList, tempoSenhas);
@@ -486,7 +484,6 @@ function contagemSenhasStart(){
 function contagemSenhasStop(){
     clearInterval(contadorSenhas);
 }
-
 // CONTAGEM PARA O SERVIÇO DE HISTÓRICO DE CAIXAS
 function contagemCaixasStart(){
     contadorCaixas = setInterval(reloadCaixasList, tempoCaixas);
@@ -495,7 +492,6 @@ function contagemCaixasStart(){
 function contagemCaixasStop(){
     clearInterval(contadorCaixas);
 }
-
 // MÉTODO DE CONTROLE DE ATIVAÇÃO DOS BOTÕES DE ATENDIMENTO
 function ativar(botoes){
   // Desativa todos os botões (evita o dedo louco)
@@ -525,18 +521,15 @@ function ativar(botoes){
 function desativar(){
     $('.menu_atendimento a').addClass('disabled');
 }
-
 function closeModal(){
     $('.modal').fadeOut();
 }
-
 function showBarsMenu(){
     $('.bt_menu_retratil').fadeIn(); //.addClass('logado');//.fadeIn();//.css({'display':'inline-block', 'padding-right':'10px'});
 }
 function hideBarsMenu(){
     $('.bt_menu_retratil').fadeOut(); //.removeClass('logado');//.fadeOut();//.css({'display':'none'});
 }
-
 function loadSuspenso(){
     hideBarsMenu();
     $('#footer').css({'display':'none'});
@@ -883,6 +876,154 @@ function openModalFinalizar(data) {
       });
     });
   }, $('.modal').fadeIn());
+}
+
+function openModalFilaUnica() {
+    $('.closebtn').css('display', 'none');
+    $('.modal .modal_content').load('modal/fu.html', function(){
+        // AO CLICAR NO BOTÃO ENTER
+        $('#senhaEscolhida').keypress(function (e) {
+            if (e.which == 13) {
+              $('form').submit();
+              return false;
+            }
+        });
+
+        $('form').submit(function(e){
+            e.preventDefault();
+            var auth = $('#senhaEscolhida').val().toUpperCase();
+            
+            if(!auth) {
+                showMessage('Não foi possível validar o ticket. Por favor tente novamente!');
+                return false;
+            }
+
+            var formData = {
+                "idUsuario"         : currentUser.usuarioID,
+                "token"             : currentUser.emissorToken,
+                "usaLocucao"        : usaLocucao,
+                "crmFidelize"       : FIDELIZE,
+                "senhaEscolhida"     : auth
+            };
+            $.ajax({
+                type		: 'POST', // define the type of HTTP verb we want to use (POST for our form)
+                url			: ATENDIMENTO+'chamarSenha'+suffix, // the url where we want to POST
+                contentType : 'application/json',
+                data		: JSON.stringify(formData), // our data object
+                dataType	: 'json', // what type of data do we expect back from the server
+                encode		: true
+            }).done(function(data) {
+                if(data.hasOwnProperty('fu')) {
+                    openModalFilaUnica();
+                } else {
+                    if(data.idAtendimento != undefined){
+                        lastAction = 'chamar';
+                        emAtendimento   = true;
+                        idAtendimento   = data.idAtendimento;
+            
+                        $('.info_chamada .n_atendimento_value').html(data.idAtendimento);
+                        $('.info_chamada .senha_value').html(data.senha);
+                        $('.info_chamada .data_value').html(data.dtImpressao);
+                        $('.info_chamada .categoria_value').html(data.nomeCategoria);
+            
+                        if(data.crm === null || data.crm === undefined || data.crm === {} ) {
+                            $('.info-crm').css({'display':'none'});
+                        } else {
+                            if(data.fotoBase64 !== null) {
+                                if (USAFOTO) {
+                                    var img = $("<img class='crm-pic' src='"+ BASE_URL + 'utils/imagem/' + data.senha +"'>");
+                                    $('.info-crm').prepend(img);
+                                }
+                            }
+                            
+                            if(data.crm.status === false) {
+                                $('#col-nocrm').css({'display':'inherit'});
+                                $('#col-nome').css({'display':'none'}); 
+                                $('#col-documento').css({'display':'none'});
+                                $('#col-correntista').css({'display':'none'});
+                                $('#col-segmento').css({'display':'none'});
+                                $('#col-ag').css({'display':'none'});
+                                $('#col-cc').css({'display':'none'});
+                            } else {
+                                $('#col-nocrm').css({'display':'none'});
+            
+                                if (data.crm.nome_cliente !== undefined) {
+                                    $('.info_chamada .nome_value').html(data.crm.nome_cliente);
+                                } else if(data.crm.nome !== undefined) {
+                                    $('.info_chamada .nome_value').html(data.crm.nome);
+                                } else {
+                                    $('#col-nome').css({'display':'none'});
+                                }
+                    
+                                if(data.crm.cpf !== undefined) {
+                                    $('.info_chamada .documento_nome > strong').text('CPF:');
+                                    if (FIDELIZE) {
+                                        $('.info_chamada .documento_value').html(data.crm.cpf + ' - ( <span class="situacao-'+ data.crm.situacao +'">' + data.crm.situacao + '</span> )');
+                                    } else {
+                                        $('.info_chamada .documento_value').html(data.crm.cpf);
+                                    }
+                                } else if(data.crm.cnpj !== undefined) {
+                                    $('.info_chamada .documento_nome > strong').text('CNPJ');
+                                    $('.info_chamada .documento_value').html(data.crm.cnpj);
+                                } else {
+                                    $('#col-documento').css({'display':'none'});
+                                }
+                
+                                if(data.crm.correntista !== undefined) {
+                                    $('.info_chamada .correntista_nome > strong').text('Correntista: ');
+                                    $('.info_chamada .correntista_value').html((data.crm.correntista ? 'Sim' : 'Não') + ' - <strong>Consignado:</strong> ' + (data.crm.consignado === 'S' ? 'Sim' : 'Não'));
+                                } else {
+                                    $('#col-correntista').css({'display':'none'});
+                                }
+                
+                                if(data.crm.segmento !== undefined) {
+                                    $('.info_chamada .segmento_nome > strong').text('Segmento:');
+                                    $('.info_chamada .segmento_value').html(data.crm.segmento);
+                                } else {
+                                    $('#col-segmento').css({'display':'none'});
+                                }
+                    
+                                if(data.crm.ag !== undefined) {
+                                    $('.info_chamada .ag_value').html(data.crm.ag);
+                                } else {
+                                    $('#col-ag').css({'display':'none'});
+                                }
+                    
+                                if(data.crm.cc !== undefined) {
+                                    $('.info_chamada .cc_value').html(data.crm.cc);
+                                } else {
+                                    $('#col-cc').css({'display':'none'});
+                                }
+                            }
+                        }
+                        if(data.tipoFilaRedirecionamento == true){
+                            $('.info_chamada .senha_redirecionada').fadeIn();
+                        }
+                        if(data.flgPriorizada == true){
+                            $('.info_chamada .senha_priorizada').fadeIn();
+                        }
+                        senhaAtual = data.senha;
+                        ativar('bt_chamar_voz, bt_rechamar, bt_iniciar_atendimento, bt_cancelar');
+                        $('.info_chamada .info_content').slideDown();
+                        closeModal();
+                        setTimeout(function(){
+                            $('.closebtn').removeAttr('style');
+                        }, 500);
+                    }else{
+                        showMessage(data.status);
+                    }
+                }
+            });
+        });
+
+        $('#cancelar').click(function(e){
+            e.preventDefault();
+            closeModal();
+            setTimeout(function(){
+                $('.closebtn').removeAttr('style');
+            }, 500);
+        });
+    }, $('.modal').fadeIn());
 }
 
 function loadMonitor(){
@@ -1973,19 +2114,19 @@ function getTerminais(){
                                     var carac = quebraPolitica[p];
                                     var letra = '<button disabled>'+carac+'</button>';
                                     if(carac == '/'){
-                                      addElement(barra);
+                                      addElement(carac, "tool_item bt_barra barra");
                                     }else if(carac == '!'){
-                                      addElement(excla);
+                                      addElement(carac, "tool_item bt_exclamacao exclamacao");
                                     }else if(carac == '['){
-                                      addElement(colcA);
+                                      addElement(carac, "tool_item bt_colcheteAbre abreColchete");
                                     }else if(carac == ']'){
-                                      addElement(colcF);
+                                      addElement(carac, "tool_item bt_colcheteFecha fechaColchete");
                                     }else if(carac == '{'){
-                                      addElement(chavA);
+                                      addElement(carac, "tool_item bt_chaveAbre abreChave");
                                     }else if(carac == '}'){
-                                      addElement(chavF);
+                                      addElement(carac, "tool_item bt_chaveFecha fechaChave");
                                     }else{
-                                      addElement(letra);
+                                      addElement(carac);
                                     }
                                 }
                             }
@@ -1996,6 +2137,8 @@ function getTerminais(){
                         e.preventDefault();
                         closeModal();
                     });
+
+                    $('.mostraGrupoFU').css('display', 'none');
 
                     // MONTA SELECT COM OS TIPOS DE POSIÇÃO
                     var listaCxPosicao = '';
@@ -2027,48 +2170,106 @@ function getTerminais(){
                         if(data){
                             var LETRAS = '';
                             var listaLetras = '';
-                            for(var l = 0; l<data.categoria.length; l++){
-                              LETRAS = data.categoria[l];
-                              listaLetras += '<button>'+$.trim(LETRAS.tipoCategoria)+'</button>';// data-id="'+LETRAS.idCategoria+'"
+                            var letrasFU = '';
+
+                            var categoriaFu = $.grep(data.categoria, function(categoria, i){
+                            if(categoria.hasOwnProperty('flgFilaUnica')) {
+                                return categoria.flgFilaUnica ? categoria : null;
+                            } else { return null; }
+                            });
+
+                            var naoCategoriaFu = $.grep(data.categoria, function(categoria, i){
+                                if(categoria.hasOwnProperty('flgFilaUnica')) {
+                                    return !categoria.flgFilaUnica ? categoria : null;
+                                } else { return null; }
+                            });
+
+                            if(categoriaFu.length === 0 && naoCategoriaFu.length === 0) {
+                                for(var l = 0; l<data.categoria.length; l++){
+                                    LETRAS = data.categoria[l];
+                                    listaLetras += '<button>'+$.trim(LETRAS.tipoCategoria)+'</button>';//data-id="'+LETRAS.idCategoria+'"
+                                }
+                                $('#teclado_letras').html(listaLetras);
+                                var TOOLS = '<button class="tool_item bt_colcheteAbre abreColchete">[</button><button class="tool_item bt_colcheteFecha fechaColchete" disabled>]</button><button class="tool_item bt_chaveAbre abreChave">{</button><button class="tool_item bt_chaveFecha fechaChave" disabled>}</button><button class="tool_item bt_barra barra">/</button><button class="tool_item bt_exclamacao exclamacao">!</button><button class="tool_item bt_asterisco asterisco">*</button>';
+                                $('#teclado_tools').html(TOOLS);
+                            } else {
+                                for(var l = 0; l<naoCategoriaFu.length; l++){
+                                    LETRAS = naoCategoriaFu[l];
+                                    listaLetras += '<button>'+$.trim(LETRAS.tipoCategoria)+'</button>';//data-id="'+LETRAS.idCategoria+'"
+                                }
+                                $('#teclado_letras').html(listaLetras);
+                                var TOOLS = '<button class="tool_item bt_colcheteAbre abreColchete">[</button><button class="tool_item bt_colcheteFecha fechaColchete" disabled>]</button><button class="tool_item bt_chaveAbre abreChave">{</button><button class="tool_item bt_chaveFecha fechaChave" disabled>}</button><button class="tool_item bt_barra barra">/</button><button class="tool_item bt_exclamacao exclamacao">!</button><button class="tool_item bt_asterisco asterisco">*</button><button class="tool_item bt_grupoFU grupoFU">#</button>';
+                                $('#teclado_tools').html(TOOLS);
                             }
-                            $('#teclado_letras').html(listaLetras);
-                            var TOOLS = '<button class="tool_item bt_colcheteAbre abreColchete">[</button><button class="tool_item bt_colcheteFecha fechaColchete" disabled>]</button><button class="tool_item bt_chaveAbre abreChave">{</button><button class="tool_item bt_chaveFecha fechaChave" disabled>}</button><button class="tool_item bt_barra barra">/</button><button class="tool_item bt_exclamacao exclamacao">!</button><button class="tool_item bt_asterisco asterisco">*</button>';
-                            $('#teclado_tools').html(TOOLS);
+
                             $('.barra').click(function(e){
                                 e.preventDefault();
-                                addElement(this);
+                                var b = this;
+                                addElement(b.innerText, "tool_item bt_barra barra");
                             });
-
+    
                             $('.exclamacao').click(function(e){
                                 e.preventDefault();
-                                addElement(this);
+                                var b = this;
+                                addElement(b.innerText, "tool_item bt_exclamacao exclamacao");
                             });
-
+    
                             $('.abreColchete').click(function(e){
                                 e.preventDefault();
-                                addElement(this);
+                                var b = this;
+                                addElement(b.innerText, "tool_item bt_colcheteAbre abreColchete");
                             });
-
+    
                             $('.fechaColchete').click(function(e){
                                 e.preventDefault();
-                                addElement(this);
+                                var b = this;
+                                addElement(b.innerText, "tool_item bt_colcheteFecha fechaColchete");
                             });
-
+    
                             $('.abreChave').click(function(e){
                                 e.preventDefault();
-                                addElement(this);
+                                var b = this;
+                                addElement(b.innerText, "tool_item bt_chaveAbre abreChave");
                             });
-
+    
                             $('.fechaChave').click(function(e){
                                 e.preventDefault();
-                                addElement(this);
+                                var b = this;
+                                addElement(b.innerText, "tool_item bt_chaveFecha fechaColchete");
                             });
 
+                            $('.grupoFU').click(function(e){
+                                e.preventDefault();
+                                var b = this;
+                                addElement(b.innerText, "tool_item bt_grupoFU grupoFU");
+                                setTimeout(function(){
+                                    $('.mostraGrupoFU').css('display', 'none');
+                                    $('.letrasFU').text('');
+                                }, 1000);
+                            }).mouseenter(function(e) {
+                                e.preventDefault();
+                                $('.mostraGrupoFU').css('display', 'block');
+                                for(var l = 0; l<categoriaFu.length; l++){
+                                    LETRAS = categoriaFu[l];
+                                    letrasFU += $.trim(LETRAS.tipoCategoria);//data-id="'+LETRAS.idCategoria+'"
+                                }
+                                $('.letrasFU').text(letrasFU);
+                            }).mouseleave(function(e){
+                                e.preventDefault();
+                                letrasFU = '';
+                                LETRAS = '';
+                                setTimeout(function(){
+                                    $('.mostraGrupoFU').css('display', 'none');
+                                    $('.letrasFU').text('');
+                                }, 1000);
+                            });
+    
                             $('#teclado_letras button').click(function(e){
                                 e.preventDefault();
-                                addElement(this);
+                                var b = this;
+                                addElement(b.innerText);
                             });
-
+    
                             $('.limparUltimo').click(function(e){
                                 e.preventDefault();
                                 removeElement();
@@ -2130,6 +2331,8 @@ function getTerminais(){
                         closeModal();
                     });
 
+                    $('.mostraGrupoFU').css('display', 'none');
+
                     // TRAZ A LISTA DO TIPO DE POSIÇÃO PARA O CAIXA
                     var listaCxPosicao = '';
                     $.ajax({
@@ -2158,47 +2361,104 @@ function getTerminais(){
                     }).done(function(data) {
                         var LETRAS = '';
                         var listaLetras = '';
-                        for(var l = 0; l<data.categoria.length; l++){
-                            LETRAS = data.categoria[l];
-                            listaLetras += '<button>'+$.trim(LETRAS.tipoCategoria)+'</button>';//data-id="'+LETRAS.idCategoria+'"
+                        var letrasFU = '';
+
+                        var categoriaFu = $.grep(data.categoria, function(categoria, i){
+                           if(categoria.hasOwnProperty('flgFilaUnica')) {
+                            return categoria.flgFilaUnica ? categoria : null;
+                           } else { return null; }
+                        });
+
+                        var naoCategoriaFu = $.grep(data.categoria, function(categoria, i){
+                            if(categoria.hasOwnProperty('flgFilaUnica')) {
+                                return !categoria.flgFilaUnica ? categoria : null;
+                            } else { return null; }
+                         });
+
+                        if(categoriaFu.length === 0 && naoCategoriaFu.length === 0) {
+                            for(var l = 0; l<data.categoria.length; l++){
+                                LETRAS = data.categoria[l];
+                                listaLetras += '<button>'+$.trim(LETRAS.tipoCategoria)+'</button>';//data-id="'+LETRAS.idCategoria+'"
+                            }
+                            $('#teclado_letras').html(listaLetras);
+                            var TOOLS = '<button class="tool_item bt_colcheteAbre abreColchete">[</button><button class="tool_item bt_colcheteFecha fechaColchete" disabled>]</button><button class="tool_item bt_chaveAbre abreChave">{</button><button class="tool_item bt_chaveFecha fechaChave" disabled>}</button><button class="tool_item bt_barra barra">/</button><button class="tool_item bt_exclamacao exclamacao">!</button><button class="tool_item bt_asterisco asterisco">*</button>';
+                            $('#teclado_tools').html(TOOLS);
+                        } else {
+                            for(var l = 0; l<naoCategoriaFu.length; l++){
+                                LETRAS = naoCategoriaFu[l];
+                                listaLetras += '<button>'+$.trim(LETRAS.tipoCategoria)+'</button>';//data-id="'+LETRAS.idCategoria+'"
+                            }
+                            $('#teclado_letras').html(listaLetras);
+                            var TOOLS = '<button class="tool_item bt_colcheteAbre abreColchete">[</button><button class="tool_item bt_colcheteFecha fechaColchete" disabled>]</button><button class="tool_item bt_chaveAbre abreChave">{</button><button class="tool_item bt_chaveFecha fechaChave" disabled>}</button><button class="tool_item bt_barra barra">/</button><button class="tool_item bt_exclamacao exclamacao">!</button><button class="tool_item bt_asterisco asterisco">*</button><button class="tool_item bt_grupoFU grupoFU">#</button>';
+                            $('#teclado_tools').html(TOOLS);
                         }
-                        $('#teclado_letras').html(listaLetras);
-                        var TOOLS = '<button class="tool_item bt_colcheteAbre abreColchete">[</button><button class="tool_item bt_colcheteFecha fechaColchete" disabled>]</button><button class="tool_item bt_chaveAbre abreChave">{</button><button class="tool_item bt_chaveFecha fechaChave" disabled>}</button><button class="tool_item bt_barra barra">/</button><button class="tool_item bt_exclamacao exclamacao">!</button><button class="tool_item bt_asterisco asterisco">*</button>';
-                        $('#teclado_tools').html(TOOLS);
 
                         $('.barra').click(function(e){
                             e.preventDefault();
-                            addElement(this);
+                            var b = this;
+                            addElement(b.innerText, "tool_item bt_barra barra");
                         });
 
                         $('.exclamacao').click(function(e){
                             e.preventDefault();
-                            addElement(this);
+                            var b = this;
+                            addElement(b.innerText, "tool_item bt_exclamacao exclamacao");
                         });
 
                         $('.abreColchete').click(function(e){
                             e.preventDefault();
-                            addElement(this);
+                            var b = this;
+                            addElement(b.innerText, "tool_item bt_colcheteAbre abreColchete");
                         });
 
                         $('.fechaColchete').click(function(e){
                             e.preventDefault();
-                            addElement(this);
+                            var b = this;
+                            addElement(b.innerText, "tool_item bt_colcheteFecha fechaColchete");
                         });
 
                         $('.abreChave').click(function(e){
                             e.preventDefault();
-                            addElement(this);
+                            var b = this;
+                            addElement(b.innerText, "tool_item bt_chaveAbre abreChave");
                         });
 
                         $('.fechaChave').click(function(e){
                             e.preventDefault();
-                            addElement(this);
+                            var b = this;
+                            addElement(b.innerText, "tool_item bt_chaveFecha fechaColchete");
+                        });
+
+                        $('.grupoFU').click(function(e){
+                            e.preventDefault();
+                            var b = this;
+                            addElement(b.innerText, "tool_item bt_grupoFU grupoFU");
+                            setTimeout(function(){
+                                $('.mostraGrupoFU').css('display', 'none');
+                                $('.letrasFU').text('');
+                            }, 1000);
+                        }).mouseenter(function(e) {
+                            e.preventDefault();
+                            $('.mostraGrupoFU').css('display', 'block');
+                            for(var l = 0; l<categoriaFu.length; l++){
+                                LETRAS = categoriaFu[l];
+                                letrasFU += $.trim(LETRAS.tipoCategoria);//data-id="'+LETRAS.idCategoria+'"
+                            }
+                            $('.letrasFU').text(letrasFU);
+                        }).mouseleave(function(e){
+                            e.preventDefault();
+                            letrasFU = '';
+                            LETRAS = '';
+                            setTimeout(function(){
+                                $('.mostraGrupoFU').css('display', 'none');
+                                $('.letrasFU').text('');
+                            }, 1000);
                         });
 
                         $('#teclado_letras button').click(function(e){
                             e.preventDefault();
-                            addElement(this);
+                            var b = this;
+                            addElement(b.innerText);
                         });
 
                         $('.limparUltimo').click(function(e){
@@ -2254,14 +2514,18 @@ function getTerminais(){
 }
 
 // ADICIONA NA TAG QUE MOSTRA A POLITICA O ELEMENTO QUE FOI CLICADO
-function addElement(elem){
-    
-    if(elem.innerHTML.length > 1) {
-        var nElem = $(elem).clone();
-        nElem[0].innerHTML = '('+elem.innerHTML+')';
+function addElement(elem, classe){
+    var element = document.createElement("button");
+    element.setAttribute('disabled', 'disabled');
+    if(classe) element.setAttribute('class', classe);
+    element.innerText = elem;
+
+    if(element.innerHTML.length > 1) {
+        var nElem = $(element).clone();
+        nElem[0].innerHTML = '('+element.innerHTML+')';
         $(nElem[0].outerHTML).appendTo('#showPolitica');
     } else {
-        $(elem).clone().appendTo("#showPolitica");
+        $(element).clone().appendTo("#showPolitica");
     }
 
     $("#showPolitica button").attr("disabled", true);
@@ -2286,16 +2550,20 @@ function removeElement(){
 // VERIFICA A CONFIGURAÇÃO DA POLITICA
 function verificaPolitica(){
     var strAtual = $("#showPolitica button").text();
-    console.log('POLITICA', strAtual);
+    console.log('STR ATUAL', strAtual);
     if(strAtual.indexOf('/') != -1 || strAtual.indexOf('!') != -1){
       ativarTeclado('bt_barra, bt_exclamacao');
       return true;
     }
 
     if(strAtual==''){
-        ativarTeclado('bt_chaveAbre, bt_colcheteAbre, bt_barra, bt_exclamacao');
+        ativarTeclado('bt_chaveAbre, bt_colcheteAbre, bt_barra, bt_exclamacao, bt_grupoFU');
         return false;
+    } else if (strAtual == '#') {
+        ativarTeclado('bt_chaveAbre, bt_colcheteAbre, bt_barra, bt_exclamacao, bt_grupoFU');
+        return true;
     }
+
     var spl = strAtual.split('');
 
     var colc    = false;
@@ -2318,10 +2586,8 @@ function verificaPolitica(){
             var last1 = spl[spl.length-1];
             var last2 = spl[spl.length-2];
 
-            console.log('LAST 1', last1, '\nLAST 2', last2, '\nCHAVE', chav, '\nCOLCHETE', colc);
-
             if(chav){
-                if(last2.match(/[A-Z\)]/i) && last1.match(/[A-Z\)]/i)){
+                if(last2.match(/[A-Z\)\#]/ig) && last1.match(/[A-Z\)\#]/ig)){
                     ativarTeclado('bt_chaveFecha');
                     return false;
                 }else{
@@ -2331,9 +2597,9 @@ function verificaPolitica(){
             }
 
             if(colc){
-                if(last1.match(/[A-Z\)]/i) || last1 == '}'){
+                if(last1.match(/[A-Z\)\#]/ig) || last1 == '}'){
                     if(!chav){
-                        ativarTeclado('bt_chaveAbre, bt_colcheteFecha');
+                        ativarTeclado('bt_chaveAbre, bt_colcheteFecha, bt_grupoFU');
                         return false;
                     }
                 }else{
@@ -2354,12 +2620,12 @@ function verificaPolitica(){
                 ativarTeclado('');
                 return false;
             }else{
-                ativarTeclado('bt_chaveAbre, bt_colcheteAbre');
+                ativarTeclado('bt_chaveAbre, bt_colcheteAbre, bt_grupoFU');
                 return false;
             }
         }
     }else{
-        ativarTeclado('bt_chaveAbre, bt_colcheteAbre');
+        ativarTeclado('bt_chaveAbre, bt_colcheteAbre, bt_grupoFU');
     }
     return true;
 }
@@ -2637,98 +2903,101 @@ function atendimentoChamar(){
         dataType	: 'json', // what type of data do we expect back from the server
         encode		: true
     }).done(function(data) {
-        if(data.idAtendimento != undefined){
-            lastAction = 'chamar';
-            emAtendimento   = true;
-            idAtendimento   = data.idAtendimento;
-
-            $('.info_chamada .n_atendimento_value').html(data.idAtendimento);
-            $('.info_chamada .senha_value').html(data.senha);
-            $('.info_chamada .data_value').html(data.dtImpressao);
-            $('.info_chamada .categoria_value').html(data.nomeCategoria);
-
-            if(data.crm === null || data.crm === undefined || data.crm === {} ) {
-                $('.info-crm').css({'display':'none'});
-            } else {
-                
-                if(data.fotoBase64 !== null) {
-                    if (USAFOTO) {
-                        var img = $("<img class='crm-pic' src='"+ BASE_URL + 'utils/imagem/' + data.senha +"'>");
-                        $('.info-crm').prepend(img);
-                    }
-                }
-                
-                if(data.crm.status === false) {
-                    $('#col-nocrm').css({'display':'inherit'});
-                    $('#col-nome').css({'display':'none'}); 
-                    $('#col-documento').css({'display':'none'});
-                    $('#col-correntista').css({'display':'none'});
-                    $('#col-segmento').css({'display':'none'});
-                    $('#col-ag').css({'display':'none'});
-                    $('#col-cc').css({'display':'none'});
+        if(data.hasOwnProperty('fu')) {
+            openModalFilaUnica();
+        } else {
+            if(data.idAtendimento != undefined){
+                lastAction = 'chamar';
+                emAtendimento   = true;
+                idAtendimento   = data.idAtendimento;
+    
+                $('.info_chamada .n_atendimento_value').html(data.idAtendimento);
+                $('.info_chamada .senha_value').html(data.senha);
+                $('.info_chamada .data_value').html(data.dtImpressao);
+                $('.info_chamada .categoria_value').html(data.nomeCategoria);
+    
+                if(data.crm === null || data.crm === undefined || data.crm === {} ) {
+                    $('.info-crm').css({'display':'none'});
                 } else {
-                    $('#col-nocrm').css({'display':'none'});
-
-                    if (data.crm.nome_cliente !== undefined) {
-                        $('.info_chamada .nome_value').html(data.crm.nome_cliente);
-                    } else if(data.crm.nome !== undefined) {
-                        $('.info_chamada .nome_value').html(data.crm.nome);
-                    } else {
-                        $('#col-nome').css({'display':'none'});
-                    }
-        
-                    if(data.crm.cpf !== undefined) {
-                        $('.info_chamada .documento_nome > strong').text('CPF:');
-                        if (FIDELIZE) {
-                            $('.info_chamada .documento_value').html(data.crm.cpf + ' - ( <span class="situacao-'+ data.crm.situacao +'">' + data.crm.situacao + '</span> )');
-                        } else {
-                            $('.info_chamada .documento_value').html(data.crm.cpf);
+                    if(data.fotoBase64 !== null) {
+                        if (USAFOTO) {
+                            var img = $("<img class='crm-pic' src='"+ BASE_URL + 'utils/imagem/' + data.senha +"'>");
+                            $('.info-crm').prepend(img);
                         }
-                    } else if(data.crm.cnpj !== undefined) {
-                        $('.info_chamada .documento_nome > strong').text('CNPJ');
-                        $('.info_chamada .documento_value').html(data.crm.cnpj);
-                    } else {
+                    }
+                    
+                    if(data.crm.status === false) {
+                        $('#col-nocrm').css({'display':'inherit'});
+                        $('#col-nome').css({'display':'none'}); 
                         $('#col-documento').css({'display':'none'});
-                    }
-    
-                    if(data.crm.correntista !== undefined) {
-                        $('.info_chamada .correntista_nome > strong').text('Correntista: ');
-                        $('.info_chamada .correntista_value').html((data.crm.correntista ? 'Sim' : 'Não') + ' - <strong>Consignado:</strong> ' + (data.crm.consignado === 'S' ? 'Sim' : 'Não'));
-                    } else {
                         $('#col-correntista').css({'display':'none'});
-                    }
-    
-                    if(data.crm.segmento !== undefined) {
-                        $('.info_chamada .segmento_nome > strong').text('Segmento:');
-                        $('.info_chamada .segmento_value').html(data.crm.segmento);
-                    } else {
                         $('#col-segmento').css({'display':'none'});
-                    }
-        
-                    if(data.crm.ag !== undefined) {
-                        $('.info_chamada .ag_value').html(data.crm.ag);
-                    } else {
                         $('#col-ag').css({'display':'none'});
-                    }
-        
-                    if(data.crm.cc !== undefined) {
-                        $('.info_chamada .cc_value').html(data.crm.cc);
-                    } else {
                         $('#col-cc').css({'display':'none'});
+                    } else {
+                        $('#col-nocrm').css({'display':'none'});
+    
+                        if (data.crm.nome_cliente !== undefined) {
+                            $('.info_chamada .nome_value').html(data.crm.nome_cliente);
+                        } else if(data.crm.nome !== undefined) {
+                            $('.info_chamada .nome_value').html(data.crm.nome);
+                        } else {
+                            $('#col-nome').css({'display':'none'});
+                        }
+            
+                        if(data.crm.cpf !== undefined) {
+                            $('.info_chamada .documento_nome > strong').text('CPF:');
+                            if (FIDELIZE) {
+                                $('.info_chamada .documento_value').html(data.crm.cpf + ' - ( <span class="situacao-'+ data.crm.situacao +'">' + data.crm.situacao + '</span> )');
+                            } else {
+                                $('.info_chamada .documento_value').html(data.crm.cpf);
+                            }
+                        } else if(data.crm.cnpj !== undefined) {
+                            $('.info_chamada .documento_nome > strong').text('CNPJ');
+                            $('.info_chamada .documento_value').html(data.crm.cnpj);
+                        } else {
+                            $('#col-documento').css({'display':'none'});
+                        }
+        
+                        if(data.crm.correntista !== undefined) {
+                            $('.info_chamada .correntista_nome > strong').text('Correntista: ');
+                            $('.info_chamada .correntista_value').html((data.crm.correntista ? 'Sim' : 'Não') + ' - <strong>Consignado:</strong> ' + (data.crm.consignado === 'S' ? 'Sim' : 'Não'));
+                        } else {
+                            $('#col-correntista').css({'display':'none'});
+                        }
+        
+                        if(data.crm.segmento !== undefined) {
+                            $('.info_chamada .segmento_nome > strong').text('Segmento:');
+                            $('.info_chamada .segmento_value').html(data.crm.segmento);
+                        } else {
+                            $('#col-segmento').css({'display':'none'});
+                        }
+            
+                        if(data.crm.ag !== undefined) {
+                            $('.info_chamada .ag_value').html(data.crm.ag);
+                        } else {
+                            $('#col-ag').css({'display':'none'});
+                        }
+            
+                        if(data.crm.cc !== undefined) {
+                            $('.info_chamada .cc_value').html(data.crm.cc);
+                        } else {
+                            $('#col-cc').css({'display':'none'});
+                        }
                     }
                 }
+                if(data.tipoFilaRedirecionamento == true){
+                    $('.info_chamada .senha_redirecionada').fadeIn();
+                }
+                if(data.flgPriorizada == true){
+                    $('.info_chamada .senha_priorizada').fadeIn();
+                }
+                senhaAtual = data.senha;
+                ativar('bt_chamar_voz, bt_rechamar, bt_iniciar_atendimento, bt_cancelar');
+                $('.info_chamada .info_content').slideDown();
+            }else{
+                showMessage(data.status);
             }
-            if(data.tipoFilaRedirecionamento == true){
-                $('.info_chamada .senha_redirecionada').fadeIn();
-            }
-            if(data.flgPriorizada == true){
-                $('.info_chamada .senha_priorizada').fadeIn();
-            }
-            senhaAtual = data.senha;
-            ativar('bt_chamar_voz, bt_rechamar, bt_iniciar_atendimento, bt_cancelar');
-            $('.info_chamada .info_content').slideDown();
-        }else{
-            showMessage(data.status);
         }
     });
 }
@@ -2772,6 +3041,11 @@ function atendimentoIniciarAtendimento(){
         dataType	: 'json', // what type of data do we expect back from the server
         encode		: true
     }).done(function(data) {
+        if (data.erro) {
+            showMessage(data.erro);
+            return false;
+        }
+
         if(data.idAtendimento>0){
             lastAction = 'iniciar_atendimento';
             catAtendimento  = data.categoria;
@@ -2874,9 +3148,11 @@ function atendimentoDescancelar(){
             if(data.crm === null || data.crm === undefined || data.crm === {} ) {
                 $('.info-crm').css({'display':'none'});
             } else {
-                if (USAFOTO) {
-                    var img = $("<img class='crm-pic' src='"+ BASE_URL + 'utils/imagem/' + data.senha +"'>");
-                    $('.info-crm').prepend(img);
+                if(data.fotoBase64 !== null) {
+                    if (USAFOTO) {
+                        var img = $("<img class='crm-pic' src='"+ BASE_URL + 'utils/imagem/' + data.senha +"'>");
+                        $('.info-crm').prepend(img);
+                    }
                 }
 
                 if(data.crm.status === false) {

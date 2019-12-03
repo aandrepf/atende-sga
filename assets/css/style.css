@@ -399,6 +399,11 @@ html {
   text-align: left;
 }
 
+#modal_fu {
+  padding: 10px 20px 0;
+  text-align: left;
+}
+
 .content_modal .col {
   padding: 4px 5px !important;
 }
