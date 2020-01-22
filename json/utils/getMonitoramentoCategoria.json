@@ -28,7 +28,7 @@
             "idAtendimento": 1925,
             "senha": "B1002",
             "dtImpressao": "08/05/2019 19:28:40",
-            "tempoEspera": "",
+            "tempoEspera": "00:31:24",
             "cor": 1,
             "porcMeta": 800,
             "priorizado": false
@@ -36,7 +36,7 @@
             "idAtendimento": 1928,
             "senha": "B1003",
             "dtImpressao": "08/05/2019 19:31:42",
-            "tempoEspera": "",
+            "tempoEspera": "01:10:02",
             "cor": 1,
             "porcMeta": 950,
             "priorizado": true
@@ -44,7 +44,7 @@
             "idAtendimento": 1929,
             "senha": "B1004",
             "dtImpressao": "08/05/2019 19:31:58",
-            "tempoEspera": "",
+            "tempoEspera": "00:00:22",
             "cor": 1,
             "porcMeta": 1100,
             "priorizado": false
@@ -52,7 +52,7 @@
             "idAtendimento": 1930,
             "senha": "B1005",
             "dtImpressao": "08/05/2019 19:32:12",
-            "tempoEspera": "",
+            "tempoEspera": "00:15:20",
             "cor": 1,
             "porcMeta": 90,
             "priorizado": true

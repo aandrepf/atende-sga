@@ -2,6 +2,7 @@
 <html><head>
     
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge;chrome=1"/>
     <meta http-equiv="cache-control" content="max-age=0" />
     <meta http-equiv="cache-control" content="no-cache" />
     <meta http-equiv="expires" content="0" />
@@ -49,7 +50,7 @@
                 <img src="assets/img/hamburguer.png" width="30" height="30" alt="menu">
             </div>
             <div id="logo">
-                <!--img src="assets/img/sga.png" alt="Aris" height="35"-->
+                <img src="assets/img/sga.png" alt="Aris" height="35">
             </div>
         </div><div class="card_terminal">
             <div class="info_content_atendente">
@@ -88,9 +89,24 @@
 
         </div>
     </div>
+	<script>
+	//bloqueia o usuario fechar a aplicação via ALT+F4
+	document.onkeydown = function(evt) {
+		evt = evt || window.event;
+		//Get key unicode
+		var unicode = evt.keyCode ? evt.keyCode : evt.charCode;
+
+		//Check it it's ALT or F4 (115)
+		if (unicode == 115 || evt.altKey == 1)
+		{
+			window.event.cancelBubble = true;
+			window.event.returnValue = false;
+		}
+	};
+	</script>
     <script src="assets/js/json2.js"></script>
     <script src="assets/js/jquery.js"></script>
-    <script src="assets/js/script.js"></script>
+    <script src="assets/js/script_atendeWeb.js"></script>
     <script src="assets/js/jquery.showLoading.js"></script>
     
 </body>

@@ -1,213 +1,282 @@
 {
-    "categoria": [{
-        "idCategoria": 32,
-        "nomeCategoria": "CAIXA SANTANDER SELECT/PRIVATE",
-        "minAmarelo": 75,
-        "minVermelho": 90,
-        "idLocalAtendimento": "CAIXA",
-        "rangeFinal": 1000,
-        "rangeInicial": 1,
-        "tipoCategoria": "A ",
-        "metaDia": 1200,
-        "paineis": [{
-            "id": 5,
-            "macAddress": "0",
-            "hostname": "127.5.0.4",
-            "tipoDisplay": 1,
-            "isAtivo": true
-        }, {
-            "id": 4,
-            "macAddress": "0",
-            "hostname": "127.0.0.1",
-            "tipoDisplay": 1,
-            "isAtivo": true
-        }],
-        "emissorFeriado": "Carga Inicial - MUNICIPAL"
-    }, {
-        "idCategoria": 31,
-        "nomeCategoria": "CAIXA PRIORITÁRIO",
-        "minAmarelo": 75,
-        "minVermelho": 90,
-        "idLocalAtendimento": "CAIXA",
-        "rangeFinal": 1500,
-        "rangeInicial": 1001,
-        "tipoCategoria": "B ",
-        "metaDia": 1200,
-        "paineis": [{
-            "id": 4,
-            "macAddress": "0",
-            "hostname": "127.0.0.1",
-            "tipoDisplay": 1,
-            "isAtivo": true
-        }],
-        "emissorFeriado": "Carga Inicial - MUNICIPAL"
-    }, {
-        "idCategoria": 45,
-        "nomeCategoria": "GERENCIA SANTANDER ESPECIAL",
-        "minAmarelo": 75,
-        "minVermelho": 90,
-        "idLocalAtendimento": "GERÊNCIA",
-        "rangeFinal": 2000,
-        "rangeInicial": 1501,
-        "tipoCategoria": "C ",
-        "metaDia": 1200,
-        "paineis": [],
-        "emissorFeriado": "Carga Inicial - MUNICIPAL"
-    }, {
-        "idCategoria": 35,
-        "nomeCategoria": "CAIXA SANTANDER NEGÓCIOS E EMPRESAS",
-        "minAmarelo": 75,
-        "minVermelho": 90,
-        "idLocalAtendimento": "CAIXA",
-        "rangeFinal": 2500,
-        "rangeInicial": 2001,
-        "tipoCategoria": "D ",
-        "metaDia": 1200,
-        "paineis": [],
-        "emissorFeriado": "Carga Inicial - MUNICIPAL"
-    }, {
-        "idCategoria": 36,
-        "nomeCategoria": "CAIXA",
-        "minAmarelo": 75,
-        "minVermelho": 90,
-        "idLocalAtendimento": "CAIXA",
-        "rangeFinal": 3000,
-        "rangeInicial": 2501,
-        "tipoCategoria": "E ",
-        "metaDia": 1200,
-        "paineis": [],
-        "emissorFeriado": "Carga Inicial - MUNICIPAL"
-    }, {
-        "idCategoria": 33,
-        "nomeCategoria": "CAIXA SANTANDER VAN GOGH",
-        "minAmarelo": 75,
-        "minVermelho": 90,
-        "idLocalAtendimento": "CAIXA",
-        "rangeFinal": 3500,
-        "rangeInicial": 3001,
-        "tipoCategoria": "F ",
-        "metaDia": 1200,
-        "paineis": [],
-        "emissorFeriado": "Carga Inicial - MUNICIPAL"
-    }, {
-        "idCategoria": 42,
-        "nomeCategoria": "GERÊNCIA PESSOA FISICA PRIORITÁRIO",
-        "minAmarelo": 75,
-        "minVermelho": 90,
-        "idLocalAtendimento": "GERÊNCIA",
-        "rangeFinal": 4000,
-        "rangeInicial": 3501,
-        "tipoCategoria": "G ",
-        "metaDia": 1200,
-        "paineis": [],
-        "emissorFeriado": "Carga Inicial - MUNICIPAL"
-    }, {
-        "idCategoria": 43,
-        "nomeCategoria": "GERENCIA SANTANDER SELECT/PRIVATE",
-        "minAmarelo": 75,
-        "minVermelho": 90,
-        "idLocalAtendimento": "GERÊNCIA",
-        "rangeFinal": 4500,
-        "rangeInicial": 4001,
-        "tipoCategoria": "H ",
-        "metaDia": 1200,
-        "paineis": [],
-        "emissorFeriado": "Carga Inicial - MUNICIPAL"
-    }, {
-        "idCategoria": 44,
-        "nomeCategoria": "GERÊNCIA SANTANDER VAN GOGH",
-        "minAmarelo": 75,
-        "minVermelho": 90,
-        "idLocalAtendimento": "GERÊNCIA",
-        "rangeFinal": 5000,
-        "rangeInicial": 4501,
-        "tipoCategoria": "I ",
-        "metaDia": 1200,
-        "paineis": [],
-        "emissorFeriado": "Carga Inicial - MUNICIPAL"
-    }, {
-        "idCategoria": 34,
-        "nomeCategoria": "CAIXA SANTANDER ESPECIAL",
-        "minAmarelo": 75,
-        "minVermelho": 90,
-        "idLocalAtendimento": "CAIXA",
-        "rangeFinal": 5500,
-        "rangeInicial": 5001,
-        "tipoCategoria": "J ",
-        "metaDia": 1200,
-        "paineis": [],
-        "emissorFeriado": "Carga Inicial - MUNICIPAL"
-    }, {
-        "idCategoria": 46,
-        "nomeCategoria": "GERENCIA SANTANDER NEGOCIOS E EMPRESAS",
-        "minAmarelo": 75,
-        "minVermelho": 90,
-        "idLocalAtendimento": "GERÊNCIA",
-        "rangeFinal": 6000,
-        "rangeInicial": 5501,
-        "tipoCategoria": "K ",
-        "metaDia": 1200,
-        "paineis": [],
-        "emissorFeriado": "Carga Inicial - MUNICIPAL"
-    }, {
-        "idCategoria": 47,
-        "nomeCategoria": "GERÊNCIA",
-        "minAmarelo": 75,
-        "minVermelho": 90,
-        "idLocalAtendimento": "GERÊNCIA",
-        "rangeFinal": 6500,
-        "rangeInicial": 6001,
-        "tipoCategoria": "L ",
-        "metaDia": 1200,
-        "paineis": [],
-        "emissorFeriado": "Carga Inicial - MUNICIPAL"
-    }, {
-        "idCategoria": 48,
-        "nomeCategoria": "GERÊNCIA NEGÓCIOS E EMPRESAS PRIORITÁRIO",
-        "minAmarelo": 75,
-        "minVermelho": 90,
-        "idLocalAtendimento": "GERÊNCIA",
-        "rangeFinal": 7000,
-        "rangeInicial": 6501,
-        "tipoCategoria": "M ",
-        "metaDia": 1200,
-        "paineis": [],
-        "emissorFeriado": "Carga Inicial - MUNICIPAL"
-    }, {
-        "idCategoria": 49,
-        "nomeCategoria": "GERÊNCIA PRIORITÁRIO",
-        "minAmarelo": 75,
-        "minVermelho": 90,
-        "idLocalAtendimento": "GERÊNCIA",
-        "rangeFinal": 7500,
-        "rangeInicial": 7001,
-        "tipoCategoria": "N ",
-        "metaDia": 1200,
-        "paineis": [],
-        "emissorFeriado": "Carga Inicial - MUNICIPAL"
-    }, {
-        "idCategoria": 50,
-        "nomeCategoria": "GERÊNCIA SANTANDER VAN GOGH PRIORITÁRIO",
-        "minAmarelo": 75,
-        "minVermelho": 90,
-        "idLocalAtendimento": "GERÊNCIA",
-        "rangeFinal": 8000,
-        "rangeInicial": 7501,
-        "tipoCategoria": "O ",
-        "metaDia": 1200,
-        "paineis": [],
-        "emissorFeriado": "Carga Inicial - MUNICIPAL"
-    }, {
-        "idCategoria": 51,
-        "nomeCategoria": "GERENCIA SANTANDER SELECT/PRIVATE PRIORITÁRIO",
-        "minAmarelo": 75,
-        "minVermelho": 90,
-        "idLocalAtendimento": "GERÊNCIA",
-        "rangeFinal": 8500,
-        "rangeInicial": 8001,
-        "tipoCategoria": "P ",
-        "metaDia": 1200,
-        "paineis": [],
-        "emissorFeriado": "Carga Inicial - MUNICIPAL"
-    }]
-}
+    "categoria": [
+    {
+    "idCategoria": 1,
+    "nomeCategoria": "ABERTURA DE CONTA UNICLASS 80+",
+    "minAmarelo": 75,
+    "minVermelho": 90,
+    "idLocalAtendimento": 1,
+    "idLocalAtendimentoDescricao": "CAIXA",
+    "rangeFinal": 9999,
+    "rangeInicial": 1,
+    "tipoCategoria": "AB ",
+    "metaDia": 1200,
+    "paineis": [
+      {
+        "id": 1,
+        "macAddress": "",
+        "hostname": "192.168.0.57",
+        "tipoDisplay": 1,
+        "isAtivo": true
+      }
+    ],
+    "emissorFeriado": ""
+    },
+        {
+    "idCategoria": 2,
+    "nomeCategoria": "ABERTURA DE CONTA UNICLASS PRIORITARIO",
+    "minAmarelo": 75,
+    "minVermelho": 90,
+    "idLocalAtendimento": 1,
+    "idLocalAtendimentoDescricao": "CAIXA",
+    "rangeFinal": 9999,
+    "rangeInicial": 1,
+    "tipoCategoria": "B ",
+    "metaDia": 1200,
+    "paineis": [
+        {
+    "id": 1,
+    "macAddress": "",
+    "hostname": "192.168.0.57",
+    "tipoDisplay": 1,
+    "isAtivo": true
+    }
+    ],
+    "emissorFeriado": ""
+    },
+        {
+    "idCategoria": 3,
+    "nomeCategoria": "ABERTURA DE CONTA UNICLASS GERAL",
+    "minAmarelo": 75,
+    "minVermelho": 90,
+    "idLocalAtendimento": 1,
+    "idLocalAtendimentoDescricao": "CAIXA",
+    "rangeFinal": 9999,
+    "rangeInicial": 1,
+    "tipoCategoria": "C ",
+    "metaDia": 1200,
+    "paineis": [
+        {
+    "id": 1,
+    "macAddress": "",
+    "hostname": "192.168.0.57",
+    "tipoDisplay": 1,
+    "isAtivo": true
+    }
+    ],
+    "emissorFeriado": ""
+    },
+    {
+    "idCategoria": 4,
+    "nomeCategoria": "ABERTURA DE CONTA PERSONNALITE 80+",
+    "minAmarelo": 75,
+    "minVermelho": 90,
+    "idLocalAtendimento": 1,
+    "idLocalAtendimentoDescricao": "CAIXA",
+    "rangeFinal": 9999,
+    "rangeInicial": 1,
+    "tipoCategoria": "D ",
+    "metaDia": 1200,
+    "paineis": [
+      {
+    "id": 1,
+    "macAddress": "",
+    "hostname": "192.168.0.57",
+    "tipoDisplay": 1,
+    "isAtivo": true
+    }
+    ],
+    "emissorFeriado": ""
+    },
+      {
+    "idCategoria": 5,
+    "nomeCategoria": "ABERTURA DE CONTA PERSONNALITE PRIORITARIO",
+    "minAmarelo": 75,
+    "minVermelho": 90,
+    "idLocalAtendimento": 1,
+    "idLocalAtendimentoDescricao": "CAIXA",
+    "rangeFinal": 9999,
+    "rangeInicial": 1,
+    "tipoCategoria": "E ",
+    "metaDia": 1200,
+    "paineis": [
+      {
+    "id": 1,
+    "macAddress": "",
+    "hostname": "192.168.0.57",
+    "tipoDisplay": 1,
+    "isAtivo": true
+    }
+    ],
+    "emissorFeriado": ""
+    },
+      {
+    "idCategoria": 6,
+    "nomeCategoria": "ABERTURA DE CONTA PERSONNALITE GERAL",
+    "minAmarelo": 75,
+    "minVermelho": 90,
+    "idLocalAtendimento": 2,
+    "idLocalAtendimentoDescricao": "GERÊNCIA",
+    "rangeFinal": 9999,
+    "rangeInicial": 1,
+    "tipoCategoria": "F ",
+    "metaDia": 1200,
+    "paineis": [
+      {
+    "id": 1,
+    "macAddress": "",
+    "hostname": "192.168.0.57",
+    "tipoDisplay": 1,
+    "isAtivo": true
+    }
+    ],
+    "emissorFeriado": ""
+    },
+      {
+    "idCategoria": 7,
+    "nomeCategoria": "CONSIGNADO 80+",
+    "minAmarelo": 75,
+    "minVermelho": 90,
+    "idLocalAtendimento": 2,
+    "idLocalAtendimentoDescricao": "GERÊNCIA",
+    "rangeFinal": 9999,
+    "rangeInicial": 1,
+    "tipoCategoria": "G ",
+    "metaDia": 1200,
+    "paineis": [
+      {
+    "id": 1,
+    "macAddress": "",
+    "hostname": "192.168.0.57",
+    "tipoDisplay": 1,
+    "isAtivo": true
+    }
+    ],
+    "emissorFeriado": ""
+    },
+      {
+    "idCategoria": 8,
+    "nomeCategoria": "CONSIGNADO PRIORITARIO",
+    "minAmarelo": 75,
+    "minVermelho": 90,
+    "idLocalAtendimento": 2,
+    "idLocalAtendimentoDescricao": "GERÊNCIA",
+    "rangeFinal": 9999,
+    "rangeInicial": 1,
+    "tipoCategoria": "H ",
+    "metaDia": 1200,
+    "paineis": [
+      {
+    "id": 1,
+    "macAddress": "",
+    "hostname": "192.168.0.57",
+    "tipoDisplay": 1,
+    "isAtivo": true
+    }
+    ],
+    "emissorFeriado": ""
+    },
+      {
+    "idCategoria": 9,
+    "nomeCategoria": "CONSIGNADO GERAL",
+    "minAmarelo": 75,
+    "minVermelho": 90,
+    "idLocalAtendimento": 2,
+    "idLocalAtendimentoDescricao": "GERÊNCIA",
+    "rangeFinal": 9999,
+    "rangeInicial": 1,
+    "tipoCategoria": "I ",
+    "metaDia": 1200,
+    "paineis": [
+      {
+    "id": 1,
+    "macAddress": "",
+    "hostname": "192.168.0.57",
+    "tipoDisplay": 1,
+    "isAtivo": true
+    }
+    ],
+    "emissorFeriado": ""
+    },
+      {
+    "idCategoria": 10,
+    "nomeCategoria": "INFORMAÇÕES 80+",
+    "minAmarelo": 75,
+    "minVermelho": 90,
+    "idLocalAtendimento": 1,
+    "idLocalAtendimentoDescricao": "CAIXA",
+    "rangeFinal": 9999,
+    "rangeInicial": 1,
+    "tipoCategoria": "J ",
+    "metaDia": 1200,
+    "paineis": [
+      {
+    "id": 1,
+    "macAddress": "",
+    "hostname": "192.168.0.57",
+    "tipoDisplay": 1,
+    "isAtivo": true
+    }
+    ],
+    "emissorFeriado": ""
+    },
+      {
+    "idCategoria": 11,
+    "nomeCategoria": "INFORMAÇÕES PRIORITARIO",
+    "minAmarelo": 75,
+    "minVermelho": 90,
+    "idLocalAtendimento": 1,
+    "idLocalAtendimentoDescricao": "CAIXA",
+    "rangeFinal": 9999,
+    "rangeInicial": 1,
+    "tipoCategoria": "K ",
+    "metaDia": 1200,
+    "paineis": [
+      {
+    "id": 1,
+    "macAddress": "",
+    "hostname": "192.168.0.57",
+    "tipoDisplay": 1,
+    "isAtivo": true
+    }
+    ],
+    "emissorFeriado": ""
+    },
+      {
+    "idCategoria": 12,
+    "nomeCategoria": "INFORMAÇÕES GERAL",
+    "minAmarelo": 75,
+    "minVermelho": 90,
+    "idLocalAtendimento": 1,
+    "idLocalAtendimentoDescricao": "CAIXA",
+    "rangeFinal": 9999,
+    "rangeInicial": 1,
+    "tipoCategoria": "L ",
+    "metaDia": 1200,
+    "paineis": [
+      {
+    "id": 1,
+    "macAddress": "",
+    "hostname": "192.168.0.57",
+    "tipoDisplay": 1,
+    "isAtivo": true
+    }
+    ],
+    "emissorFeriado": ""
+    },
+      {
+    "idCategoria": 13,
+    "nomeCategoria": "INFORMAÇÕES BANCO ",
+    "minAmarelo": 75,
+    "minVermelho": 90,
+    "idLocalAtendimento": 2,
+    "idLocalAtendimentoDescricao": "GERÊNCIA",
+    "rangeFinal": 9999,
+    "rangeInicial": 2,
+    "tipoCategoria": "M ",
+    "metaDia": 1200,
+    "paineis": [],
+    "emissorFeriado": ""
+    }
+    ]
+    }

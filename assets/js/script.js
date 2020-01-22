@@ -15,19 +15,19 @@ var UTIL;
 var AGENCIA;
 var IDENTIFICACAO;
 
-var FIDELIZE = true;
+var FIDELIZE = false;
 var USAFOTO = false;
 
-var DEBUG = 0;
+var DEBUG = 2;
 
-print('V 1.3.4');
+print('V 1.5.2');
 
-if(DEBUG == 2){
+if(DEBUG == 0){
     BASE_URL    = 'json/';
     suffix      = '.json';
 }else if(DEBUG == 1){
     if (isWeb) {
-        BASE_URL = location.protocol + '//' + location.host.split(':')[0] + ':8080/'
+        BASE_URL = location.protocol + '//' + location.host.split(':')[0] + ':8080/';
     } else {
         protocol = retorno.ssl ? 'https:' : 'http:';
         BASE_URL = protocol + '//' + retorno.endpoint + ':8080/';
@@ -35,7 +35,7 @@ if(DEBUG == 2){
     suffix = '';
 }else{
     if (isWeb) {
-        BASE_URL = location.protocol + '//' + location.host.split(':')[0] + ':8080/'
+        BASE_URL = location.protocol + '//' + location.host.split(':')[0] + ':8080/';
     } else {
         protocol = retorno.ssl ? 'https:' : 'http:';
         BASE_URL = protocol + '//' + retorno.endpoint + '/';
@@ -57,39 +57,39 @@ var tempoReativar   = 2000; // 2s
 var contadorAtendimento;
 var segsAtend = 0;
 
-// Timer Atendimento
+// Timer Suspensão
 var contadorSuspensao;
 var segsSusp = 0;
 
 // Chamada Busca Atendimento Pendente
 var contadorBusca;
-var tempoBusca      = 15000; // 30s
+var tempoBusca = 15000; // 30s
 
 // Tempos das Páginas de Monitoramento
 var contadorCategorias;
 var tempoCategorias = 15000;
 var contadorSenhas;
-var tempoSenhas     = 60000;
+var tempoSenhas = 60000;
 var contadorCaixas;
-var tempoCaixas     = 60000;
+var tempoCaixas = 60000;
 
 ///////////////// END CONFIG /////////////////
-
 var lastAction;
 var currentUser;
 var idAtendimento;
 var catAtendimento;
+var nomeCatAtendimento;
 var emAtendimento = false;
 var labelSuspensao = '';
 var usaLocucao = 'N';
 var senhaAtual;
 var usaObjetivo;
+var filaUnica;
 
 var bt_ativos   = [];
 
 var today = new Date();
 var dd = today.getDate();
-
 var mm = today.getMonth()+1;
 var yyyy = today.getFullYear();
 if(dd<10){
@@ -121,13 +121,22 @@ $(function () {
                     }, 1000);
                     return false;
                 }
+                /* if($('#terminal').val()==''){
+                    setTimeout(function(){
+                        $('#terminal').val($('#matricula').val());
+                        $('#main').hideLoading();
+                    }, 1000);
+                    return false;
+                } */
                 // $('#login').append('<div class="overlay" style="position:absolute; width:100%;height: 100%; top:0;left:0; background:#FAFAFA; display:none;"></div>');//css({'opacity':.6});
                 // $('#login .overlay').fadeTo( "fast", 0.5 );
 
                 var formData = {
-                    "hostname"  : $('#matricula').val().toUpperCase(),
+                    "hostname"  : $('#terminal').val() !== '' ? $('#terminal').val().toUpperCase() : $('#matricula').val().toUpperCase(),
                     "matricula" : $('#matricula').val().toUpperCase()
                 };
+
+                console.log(formData);
 
                 // LOGIN
                 $.ajax({
@@ -142,6 +151,7 @@ $(function () {
                         currentUser = data;
                         // ipcRenderer.send('com', { 'evt': 'login' });
 
+                        // USADO PARA DEFINIR SE HAVERÁ OU NÃO MODAL COM OS OBJETIVOS DE FINALIZAÇÃO
                         usaObjetivo = currentUser.flgObjetivo;
 
                         if(currentUser.usuarioTipo == 1){
@@ -154,7 +164,8 @@ $(function () {
                     }else if(data.error.indexOf('EMISSOR NÃO ENCONTRADO') != -1){
                         showMessage(data.error);
                     }else{
-                        showForceLogoff($('#matricula').val());
+                        // showForceLogoff($('#matricula').val()); // MÉTODO ORIGINAL 11/11/2019 - 17:29 - André Figueiredo
+                        showForceLogoff($('#matricula').val().toUpperCase(), $('#terminal').val() !== '' ? $('#terminal').val().toUpperCase() : $('#matricula').val().toUpperCase())
                         showMessage(data.error);
                     }
                     // $('#login .overlay').fadeOut( "fast" );
@@ -219,7 +230,7 @@ $(function () {
 });
 
 // FORÇAR LOGOFF DE USUARIO CASO ESTEJA LOGADO EM OUTRA ESTAÇÃO
-function showForceLogoff(matricula) {
+function showForceLogoff(matricula, terminal) {
     $('.modal .modal_content').load('modal/force-logoff.html', function(){
         $('#cancelar').click(function(e){
             $('#login .overlay').fadeOut( "fast" );
@@ -228,12 +239,13 @@ function showForceLogoff(matricula) {
         });
 
         var matriculaUppercase = matricula.toUpperCase();
+        var terminalUppercase = terminal.toUpperCase(); // INCLUIDO em 11/11/2019 - 17:31 - André Figueiredo - LEMBREAR DE ALTERAR
 
         $('form').submit(function(e){
             e.preventDefault();
             var formData = {
                 'matricula' : matriculaUppercase,
-                'hostname'  : matriculaUppercase
+                'hostname'  : terminalUppercase
             };
 
             $.ajax({
@@ -246,8 +258,8 @@ function showForceLogoff(matricula) {
             }).done(function(data) {
                 if(data.logoff == true){
                     var formData = {
-                        "hostname"  : matriculaUppercase,
-                        "matricula" : matriculaUppercase
+                        'matricula' : matriculaUppercase,
+                        'hostname'  : terminalUppercase
                     };
 
                     // FAZ NOVAMENTE O LOGIN DO USUARIO NA ESTAÇÃO ATUAL
@@ -373,48 +385,59 @@ function busca(){
               $('.politica_value').text(data.politicaFormatada);
               print('Política mudou');
             }
+            var initilizer = 0;
+
+            // TOTAL DA AGENCIA
+            var total_agencia = $.map(data.senhas, function(item) {
+                return item.total
+            });
+
+            var soma_agencia = 0;
+            for (var i = 0; i < total_agencia.length; i++) {
+                soma_agencia += total_agencia[i];
+            }
+
+            $('.espera_agencia .count').html(soma_agencia);
+
+            var arrayCatPolitica = $.map(data.politica, function(item){
+                return item.categoria.id;
+            });
+
+            var filterRepetido = [];
+            $.each(arrayCatPolitica, function(i, el){
+                if($.inArray(el, filterRepetido) === -1) filterRepetido.push(el);
+            });
+
+            var nArrayCatPolitica = $(filterRepetido).filter(function(i, item){
+                return $.inArray( item, filterRepetido ) === -1;
+            });
 
             var fila = [];
-            var cats_fila = [];
-            var total_agencia = 0;
-            var qt_senhas = data.senhas.length;
-            for(var i = 0; i<qt_senhas; i++){
-              if(data.senhas[i]['total']>0){
-                fila = [data.senhas[i]['idCategoria'], data.senhas[i]['total']];
-                cats_fila.push(fila);
-                total_agencia = total_agencia+data.senhas[i]['total'];
-              }
-            }
-            $('.espera_agencia .count').html(total_agencia);
+            $.each(nArrayCatPolitica.prevObject, function(i, item){
+                fila.push($(data.senhas).filter(function(i, senha){
+                    return senha.idCategoria === item;
+                })[0]);
+            });
 
-            var arrPolitica = [];
-            var qt_politica = data.politica.length;
-            for(var p = 0; p<qt_politica; p++){
-              arrPolitica.push(data.politica[p].categoria.id);
+            //TOTAL ATENDENTE
+            var total_atendente = $.map(fila, function(item){
+                return item.total;
+            });
+
+            var soma_atendente = 0;
+            for (var i = 0; i < total_atendente.length; i++) {
+                soma_atendente += total_atendente[i];
             }
 
-            // Total atendimento para este usuário
-            var total_atendente = 0;
-            var qt_fila = cats_fila.length;
-            var qt_poli = arrPolitica.length;
-            for(var f = 0; f<qt_fila; f++){
-              var cat = cats_fila[f];
-              for(var p2 = 0; p2 < qt_poli; p2++){
-                var pol = arrPolitica[p2];
-                if(cat[0] == pol){
-                  total_atendente += cat[1];
-                }
-              }
-            }
-            $('.espera_atendente .count').html(total_atendente);
+            $('.espera_atendente .count').html(soma_atendente);
 
             if(lastAction == 'descancelar'){
               ativar('bt_chamar_voz, bt_rechamar, bt_iniciar_atendimento, bt_cancelar');
             }else if(lastAction == 'cancelar'){
               ativar('bt_chamar_voz, bt_chamar, bt_descancelar, bt_suspender');
-            }else if( (total_atendente>0) && emAtendimento == false){
+            }else if( (soma_atendente>0) && emAtendimento == false){
               ativar('bt_chamar_voz, bt_chamar, bt_suspender');
-            }else if( (total_atendente == 0) && emAtendimento == false){
+            }else if( (soma_atendente == 0) && emAtendimento == false){
               ativar('bt_suspender');
             }
         }else{
@@ -432,7 +455,6 @@ function contagemBuscaStart(){
 function contagemBuscaStop(){
   clearInterval(contadorBusca);
 }
-
 // EXECUTA O SERVIÇO DE MONITORAMENTO DAS CATEGORIAS
 function contagemCategoriasStart(){
     contadorCategorias = setInterval(reloadCategoriasList, tempoCategorias);
@@ -441,7 +463,6 @@ function contagemCategoriasStart(){
 function contagemCategoriasStop(){
     clearInterval(contadorCategorias);
 }
-
 // DESATIVA O RECHAMAR
 function desativaRechamar(){
   contadorRechamar = setInterval(reativarRechamar, tempoReativar);
@@ -455,7 +476,6 @@ function reativarRechamar(){
   ativar('bt_chamar_voz, bt_rechamar, bt_iniciar_atendimento, bt_cancelar');
   reativaRechamar();
 }
-
 // CONTADOR DE SENHAS
 function contagemSenhasStart(){
     contadorSenhas = setInterval(reloadSenhasList, tempoSenhas);
@@ -464,7 +484,6 @@ function contagemSenhasStart(){
 function contagemSenhasStop(){
     clearInterval(contadorSenhas);
 }
-
 // CONTAGEM PARA O SERVIÇO DE HISTÓRICO DE CAIXAS
 function contagemCaixasStart(){
     contadorCaixas = setInterval(reloadCaixasList, tempoCaixas);
@@ -473,7 +492,6 @@ function contagemCaixasStart(){
 function contagemCaixasStop(){
     clearInterval(contadorCaixas);
 }
-
 // MÉTODO DE CONTROLE DE ATIVAÇÃO DOS BOTÕES DE ATENDIMENTO
 function ativar(botoes){
   // Desativa todos os botões (evita o dedo louco)
@@ -503,18 +521,15 @@ function ativar(botoes){
 function desativar(){
     $('.menu_atendimento a').addClass('disabled');
 }
-
 function closeModal(){
     $('.modal').fadeOut();
 }
-
 function showBarsMenu(){
     $('.bt_menu_retratil').fadeIn(); //.addClass('logado');//.fadeIn();//.css({'display':'inline-block', 'padding-right':'10px'});
 }
 function hideBarsMenu(){
     $('.bt_menu_retratil').fadeOut(); //.removeClass('logado');//.fadeOut();//.css({'display':'none'});
 }
-
 function loadSuspenso(){
     hideBarsMenu();
     $('#footer').css({'display':'none'});
@@ -708,13 +723,15 @@ function loadAtendimento(){
 function openModalRedirecionar(data) {
   $('.modal .modal_content').load('modal/redirecionar.html', function(){
     var html_categorias = '';
-    $.each(data, function() {
-      $.each(this, function(k, v) {
-        if(catAtendimento != v.idCategoria){
-          html_categorias += '<option value="'+v.idCategoria+'">'+v.nomeCategoria+'</option>';
-        }
-      });
+    var split = nomeCatAtendimento.split(' ');
+    var filtroCategorias = $(data.categoria).filter(function(i, item) {
+        return item.nomeCategoria.indexOf(split[split.length -1]) !== -1 && item.idCategoria !== catAtendimento;
     });
+
+    $.each(filtroCategorias, function(k, v) {
+      html_categorias += '<option value="'+v.idCategoria+'">'+v.nomeCategoria+'</option>';
+    });
+
     $('#redirecionar_categorias').html(html_categorias);
     $('#cancelar').click(function(e){
         e.preventDefault();
@@ -861,6 +878,154 @@ function openModalFinalizar(data) {
   }, $('.modal').fadeIn());
 }
 
+function openModalFilaUnica() {
+    $('.closebtn').css('display', 'none');
+    $('.modal .modal_content').load('modal/fu.html', function(){
+        // AO CLICAR NO BOTÃO ENTER
+        $('#senhaEscolhida').keypress(function (e) {
+            if (e.which == 13) {
+              $('form').submit();
+              return false;
+            }
+        });
+
+        $('form').submit(function(e){
+            e.preventDefault();
+            var auth = $('#senhaEscolhida').val().toUpperCase();
+            
+            if(!auth) {
+                showMessage('Não foi possível validar o ticket. Por favor tente novamente!');
+                return false;
+            }
+
+            var formData = {
+                "idUsuario"         : currentUser.usuarioID,
+                "token"             : currentUser.emissorToken,
+                "usaLocucao"        : usaLocucao,
+                "crmFidelize"       : FIDELIZE,
+                "senhaEscolhida"     : auth
+            };
+            $.ajax({
+                type		: 'POST', // define the type of HTTP verb we want to use (POST for our form)
+                url			: ATENDIMENTO+'chamarSenha'+suffix, // the url where we want to POST
+                contentType : 'application/json',
+                data		: JSON.stringify(formData), // our data object
+                dataType	: 'json', // what type of data do we expect back from the server
+                encode		: true
+            }).done(function(data) {
+                if(data.hasOwnProperty('fu')) {
+                    openModalFilaUnica();
+                } else {
+                    if(data.idAtendimento != undefined){
+                        lastAction = 'chamar';
+                        emAtendimento   = true;
+                        idAtendimento   = data.idAtendimento;
+            
+                        $('.info_chamada .n_atendimento_value').html(data.idAtendimento);
+                        $('.info_chamada .senha_value').html(data.senha);
+                        $('.info_chamada .data_value').html(data.dtImpressao);
+                        $('.info_chamada .categoria_value').html(data.nomeCategoria);
+            
+                        if(data.crm === null || data.crm === undefined || data.crm === {} ) {
+                            $('.info-crm').css({'display':'none'});
+                        } else {
+                            if(data.fotoBase64 !== null) {
+                                if (USAFOTO) {
+                                    var img = $("<img class='crm-pic' src='"+ BASE_URL + 'utils/imagem/' + data.senha +"'>");
+                                    $('.info-crm').prepend(img);
+                                }
+                            }
+                            
+                            if(data.crm.status === false) {
+                                $('#col-nocrm').css({'display':'inherit'});
+                                $('#col-nome').css({'display':'none'}); 
+                                $('#col-documento').css({'display':'none'});
+                                $('#col-correntista').css({'display':'none'});
+                                $('#col-segmento').css({'display':'none'});
+                                $('#col-ag').css({'display':'none'});
+                                $('#col-cc').css({'display':'none'});
+                            } else {
+                                $('#col-nocrm').css({'display':'none'});
+            
+                                if (data.crm.nome_cliente !== undefined) {
+                                    $('.info_chamada .nome_value').html(data.crm.nome_cliente);
+                                } else if(data.crm.nome !== undefined) {
+                                    $('.info_chamada .nome_value').html(data.crm.nome);
+                                } else {
+                                    $('#col-nome').css({'display':'none'});
+                                }
+                    
+                                if(data.crm.cpf !== undefined) {
+                                    $('.info_chamada .documento_nome > strong').text('CPF:');
+                                    if (FIDELIZE) {
+                                        $('.info_chamada .documento_value').html(data.crm.cpf + ' - ( <span class="situacao-'+ data.crm.situacao +'">' + data.crm.situacao + '</span> )');
+                                    } else {
+                                        $('.info_chamada .documento_value').html(data.crm.cpf);
+                                    }
+                                } else if(data.crm.cnpj !== undefined) {
+                                    $('.info_chamada .documento_nome > strong').text('CNPJ');
+                                    $('.info_chamada .documento_value').html(data.crm.cnpj);
+                                } else {
+                                    $('#col-documento').css({'display':'none'});
+                                }
+                
+                                if(data.crm.correntista !== undefined) {
+                                    $('.info_chamada .correntista_nome > strong').text('Correntista: ');
+                                    $('.info_chamada .correntista_value').html((data.crm.correntista ? 'Sim' : 'Não') + ' - <strong>Consignado:</strong> ' + (data.crm.consignado === 'S' ? 'Sim' : 'Não'));
+                                } else {
+                                    $('#col-correntista').css({'display':'none'});
+                                }
+                
+                                if(data.crm.segmento !== undefined) {
+                                    $('.info_chamada .segmento_nome > strong').text('Segmento:');
+                                    $('.info_chamada .segmento_value').html(data.crm.segmento);
+                                } else {
+                                    $('#col-segmento').css({'display':'none'});
+                                }
+                    
+                                if(data.crm.ag !== undefined) {
+                                    $('.info_chamada .ag_value').html(data.crm.ag);
+                                } else {
+                                    $('#col-ag').css({'display':'none'});
+                                }
+                    
+                                if(data.crm.cc !== undefined) {
+                                    $('.info_chamada .cc_value').html(data.crm.cc);
+                                } else {
+                                    $('#col-cc').css({'display':'none'});
+                                }
+                            }
+                        }
+                        if(data.tipoFilaRedirecionamento == true){
+                            $('.info_chamada .senha_redirecionada').fadeIn();
+                        }
+                        if(data.flgPriorizada == true){
+                            $('.info_chamada .senha_priorizada').fadeIn();
+                        }
+                        senhaAtual = data.senha;
+                        ativar('bt_chamar_voz, bt_rechamar, bt_iniciar_atendimento, bt_cancelar');
+                        $('.info_chamada .info_content').slideDown();
+                        closeModal();
+                        setTimeout(function(){
+                            $('.closebtn').removeAttr('style');
+                        }, 500);
+                    }else{
+                        showMessage(data.status);
+                    }
+                }
+            });
+        });
+
+        $('#cancelar').click(function(e){
+            e.preventDefault();
+            closeModal();
+            setTimeout(function(){
+                $('.closebtn').removeAttr('style');
+            }, 500);
+        });
+    }, $('.modal').fadeIn());
+}
+
 function loadMonitor(){
     showBarsMenu();
     $('#footer').css({'display':'none'});
@@ -913,14 +1078,25 @@ function getMonitoramentoCategoria(){
               $.each(data, function() {
                 $.each(this, function(k, v) {
                   var cor_item = '';
+                  var title = '';
                   var bg_verde    = false;
                   var bg_amarelo  = false;
                   var bg_vermelho = false;
 
-                  $.each(v.senhaEmAberto, function(k, v2) {
+                  var splitTe = v.tempoMedioEspera.split(':');
+                  var seconds = (+splitTe[0]) * 60 * 60 + (+splitTe[1]) * 60 + (+splitTe[2]);
+                  porcentagem = ((seconds * 100)/v.metaDia).toFixed(2); 
+                  if(porcentagem >= v.minVermelho){
+                    bg_vermelho = true;
+                  }else if(porcentagem >= v.minAmarelo){
+                    bg_amarelo = true;
+                  }else{
+                    bg_verde = true;
+                  }
+
+                  /*$.each(v.senhaEmAberto, function(k, v2) {
                     var meta    = (v2.porcMeta/v.metaDia)*100;
                     meta = parseFloat(Math.round(meta * 100) / 100).toFixed(2);
-
                     if(meta >= v.minVermelho){
                       bg_vermelho = true;
                     }else if(meta >= v.minAmarelo){
@@ -928,18 +1104,28 @@ function getMonitoramentoCategoria(){
                     }else{
                       bg_verde = true;
                     }
-                  });
+                  });*/
 
+                  if(v.totalSenhaEmAberto === 0) {
+                    cor_item = '';
+                    title = 'SEM ATENDIMENTO'
+                    bg_verde    = false;
+                    bg_amarelo  = false;
+                    bg_vermelho = false;
+                  }
                   if(bg_verde == true){
                     cor_item = 'bg_verde';
+                    title = 'NORMAL';
                   }
                   if(bg_amarelo == true){
                     cor_item = 'bg_amarelo';
+                    title = 'ALERTA';
                   }
                   if(bg_vermelho == true){
                     cor_item = 'bg_vermelho';
+                    title = 'CRÍTICO';
                   }
-                  item += '<tr id="categoria'+v.idCategoria+'"><td class="align_left">'+v.nomeCategoria+'</td><td class="totalSenhaEmAberto">'+v.totalSenhaEmAberto+'</td><td class="status"><span class="bolinha '+cor_item+'"></span></td><td><a data-id="'+k+'" class="view_fila_detalhe" href="#"><i class="fas fa-eye"></i></a></td></tr>';
+                  item += '<tr id="categoria'+v.idCategoria+'"><td class="align_left">'+v.nomeCategoria+'</td><td class="totalSenhaEmAberto">'+v.totalSenhaEmAberto+'</td><td class="status"><span class="bolinha '+cor_item+'" title="'+title+'"></span></td><td><a data-id="'+k+'" class="view_fila_detalhe" href="#"><i class="fas fa-eye"></i></a></td></tr>';
                 });
               });
               $('.list_monitor tbody').html(item);
@@ -964,18 +1150,22 @@ function getMonitoramentoCategoria(){
                         '<a data-set_priorizar="false" data-senha="'+oItem.senha+'" class="priorizar_senha" id="'+oItem.idAtendimento+'" href="#"><i class="fas fa-check-circle"></i></a>' :
                         '<a data-set_priorizar="true" data-senha="'+oItem.senha+'" class="priorizar_senha" id="'+oItem.idAtendimento+'" href="#"><i class="fas fa-times-circle"></i></a>';
                       var espera  = oItem.tempoEspera ? oItem.tempoEspera : 'N/A';
-                      var meta    = (oItem.porcMeta/aCategoria.metaDia)*100;
-                      meta = parseFloat(Math.round(meta * 100) / 100).toFixed(2);
+                      // var meta    = (oItem.porcMeta/aCategoria.metaDia)*100;
+                      // meta = parseFloat(Math.round(meta * 100) / 100).toFixed(2);
+                      var splitTe = oItem.tempoEspera.split(':');
+                      var seconds = (+splitTe[0]) * 60 * 60 + (+splitTe[1]) * 60 + (+splitTe[2]);
+                      porcentagem = ((seconds * 100)/aCategoria.metaDia).toFixed(2);    
+
                       var cor = '';
-                      if(meta>=aCategoria.minVermelho){
+                      if(porcentagem>=aCategoria.minVermelho){
                         cor = 'bg_vermelho';
-                      }else if(meta>=aCategoria.minAmarelo){
+                      }else if(porcentagem>=aCategoria.minAmarelo){
                         cor = 'bg_amarelo';
                       }else{
                         cor = 'bg_verde';
                       }
-                      senha_list += '<tr id="senha'+oItem.senha+'"><td><span class="bolinha '+cor+'"></span></td><td>'+oItem.senha+'</td><td>'+oItem.dtImpressao+'</td><td>'+espera+'</td><td>'+meta+'</td><td><a data-id="'+oItem.idAtendimento+'" class="cancelar_senha" href=""><i class="fas fa-times-circle"></i></a></td><td class="stt_priorizar">'+priorizar+'</td></tr>';
-                    }
+                      senha_list += '<tr id="senha'+oItem.senha+'"><td><span class="bolinha '+cor+'"></span></td><td>'+oItem.senha+'</td><td>'+oItem.dtImpressao+'</td><td>'+espera+'</td><td>'+porcentagem+'</td><td><a data-id="'+oItem.idAtendimento+'" class="cancelar_senha" href=""><i class="fas fa-times-circle"></i></a></td><td class="stt_priorizar">'+priorizar+'</td></tr>';
+                }
                     $('.list_monitor_fila tbody').html(senha_list);
                     $('.cancelar_senha').click(function(e){
                         e.preventDefault();
@@ -1058,32 +1248,55 @@ function reloadCategoriasList(){
             $.each(catAtuais, function() {
                 $.each(this, function(k, v) {
                     var cor_item = '';
+                    var title = '';
                     var bg_verde    = false;
                     var bg_amarelo  = false;
                     var bg_vermelho = false;
-                    $.each(v.senhaEmAberto, function(k, v2) {
-                        var meta    = (v2.porcMeta/v.metaDia)*100;
-                        meta = parseFloat(Math.round(meta * 100) / 100).toFixed(2);
-                        if(meta >= v.minVermelho){
-                          bg_vermelho = true;
-                        }else if(meta >= v.minAmarelo){
-                          bg_amarelo = true;
-                        }else{
-                          bg_verde = true;
-                        }
-                    });
+                    var splitTe = v.tempoMedioEspera.split(':');
+                    var seconds = (+splitTe[0]) * 60 * 60 + (+splitTe[1]) * 60 + (+splitTe[2]);
+                    porcentagem = ((seconds * 100)/v.metaDia).toFixed(2);
 
+                    if(porcentagem >= v.minVermelho){
+                        bg_vermelho = true;
+                    }else if(porcentagem >= v.minAmarelo){
+                        bg_amarelo = true;
+                    }else{
+                        bg_verde = true;
+                    }
+
+                  /*$.each(v.senhaEmAberto, function(k, v2) {
+                    var meta    = (v2.porcMeta/v.metaDia)*100;
+                    meta = parseFloat(Math.round(meta * 100) / 100).toFixed(2);
+                    if(meta >= v.minVermelho){
+                      bg_vermelho = true;
+                    }else if(meta >= v.minAmarelo){
+                      bg_amarelo = true;
+                    }else{
+                      bg_verde = true;
+                    }
+                  });*/
+
+                    if(v.totalSenhaEmAberto === 0) {
+                       cor_item = '';
+                       title = 'SEM ATENDIMENTO';
+                       bg_verde    = false;
+                       bg_amarelo  = false;
+                       bg_vermelho = false;
+                    }
                     if(bg_verde == true){
                       cor_item = 'bg_verde';
+                      title= 'NORMAL';
                     }
                     if(bg_amarelo == true){
                       cor_item = 'bg_amarelo';
+                      title = 'ALERTA';
                     }
                     if(bg_vermelho == true){
                       cor_item = 'bg_vermelho';
+                      title = 'CRÍTICO';
                     }
                     $('#categoria'+v.idCategoria+' .totalSenhaEmAberto').text(v.totalSenhaEmAberto);
-                    $('#categoria'+v.idCategoria+' .status').html('<span class="bolinha '+cor_item+'"></span>');
+                    $('#categoria'+v.idCategoria+' .status').html('<span class="bolinha '+cor_item+'" title="'+title+'"></span>');
                 });
             });
         }
@@ -1098,24 +1311,29 @@ function reloadCategoriasList(){
                 $('#fila_minAmarelo').text(aCategoria.minAmarelo);
                 $('#fila_minVermelho').text(aCategoria.minVermelho);
 
-                var senha_list = '<tr><th>SENHA</th><th>DT IMPRESSÃO</th><th>ESPERA</th><th>META %</th><th>CANCELAR</th><th>PRIORIZADO</th></tr>';
+                var senha_list = '<tr><th></th><th>SENHA</th><th>DT IMPRESSÃO</th><th>ESPERA</th><th>TE/META %</th><th>CANCELAR</th><th>PRIORIZADO</th></tr>';
                 for(var f = 0; f<catAtuais.categorias[id].senhaEmAberto.length; f++){
                     var oItem = catAtuais.categorias[id].senhaEmAberto[f];
                     var priorizar = oItem.priorizado == true ?
                       '<a data-priorizado="false" data-id_atendimento="'+oItem.idAtendimento+'" class="priorizar_senha" id="'+oItem.idAtendimento+'" href="#"><i class="fas fa-check-circle"></i></a>' :
                       '<a data-priorizado="true" data-id_atendimento="'+oItem.idAtendimento+'" class="priorizar_senha" id="'+oItem.idAtendimento+'" href="#"><i class="fas fa-times-circle"></i></a>';
+                    
                     var espera  = oItem.tempoEspera ? oItem.tempoEspera : 'N/A';
-                    var meta    = (oItem.porcMeta/aCategoria.metaDia)*100;
-                    meta = parseFloat(Math.round(meta * 100) / 100).toFixed(2);
+                    // var meta    = (oItem.porcMeta/aCategoria.metaDia)*100;
+                    // meta = parseFloat(Math.round(meta * 100) / 100).toFixed(2);
+                    var splitTe = oItem.tempoEspera.split(':');
+                    var seconds = (+splitTe[0]) * 60 * 60 + (+splitTe[1]) * 60 + (+splitTe[2]);
+                    porcentagem = ((seconds * 100)/aCategoria.metaDia).toFixed(2);    
+
                     var cor = '';
-                    if(meta>=aCategoria.minVermelho){
+                    if(porcentagem>=aCategoria.minVermelho){
                       cor = 'bg_vermelho';
-                    }else if(meta>=aCategoria.minAmarelo){
+                    }else if(porcentagem>=aCategoria.minAmarelo){
                       cor = 'bg_amarelo';
                     }else{
                       cor = 'bg_verde';
                     }
-                    senha_list += '<tr id="senha'+oItem.idAtendimento+'"><td><span class="bolinha '+cor+'"></span>'+oItem.senha+'</td><td>'+oItem.dtImpressao+'</td><td>'+espera+'</td><td>'+meta+'</td><td><a data-id="'+oItem.idAtendimento+'" class="cancelar_senha" href=""><i class="fas fa-times-circle"></i></a></td><td>'+priorizar+'</td></tr>';
+                    senha_list += '<tr id="senha'+oItem.senha+'"><td><span class="bolinha '+cor+'"></span></td><td>'+oItem.senha+'</td><td>'+oItem.dtImpressao+'</td><td>'+espera+'</td><td>'+porcentagem+'</td><td><a data-id="'+oItem.idAtendimento+'" class="cancelar_senha" href=""><i class="fas fa-times-circle"></i></a></td><td class="stt_priorizar">'+priorizar+'</td></tr>';
                 }
                 $('.list_monitor_fila').html(senha_list);
                 $('.cancelar_senha').click(function(e){
@@ -1373,46 +1591,67 @@ function getAgencia(){
     });
 }
 
-// ADICIONA PAINEL SELECIONADO
-function addPainel(painel){
-    $(painel).appendTo("#showPaineis");
-    var id = $(painel).data('id');
-    var n = 0;
-    for(var i=0; i<4; i++){
-        n = i+1;
-        if($('#idPainel'+n).val() == 0){
-          $('#idPainel'+n).val(id);
-          return;
-        }
+// ADICIONA NA LISTA DE ESCOLHIDOS
+function makeSelected(painel) {
+    var painelEscolhido = document.createElement("div");
+    painelEscolhido.className = painel.className;
+    painelEscolhido.id = painel.id;
+    painelEscolhido.dataset.id = $(painel).data('id');
+    painelEscolhido.dataset.state = 'escolhido';
+    painelEscolhido.innerHTML = painel.innerHTML;
+
+    painelEscolhido.addEventListener('click', function(e){
+        e.preventDefault();
+        var removerEscolhido = document.getElementById(this.id);
+        document.getElementById("showPaineis").removeChild(removerEscolhido);
+        makeDisponivel(this);
+    });
+
+    document.getElementById("showPaineis").appendChild(painelEscolhido);
+    var lista = document.getElementById('showPaineis').childNodes;
+    var idPainel = [];
+    $.each(lista, function(k,item){
+        idPainel.push($(item).data('id'));
+    });
+    for(var i=0; i<idPainel.length; i++){
+        $('#idPainel'+(i+1).toString()).val(idPainel[i]);
     }
+
 }
 
-// REMOVER PAINEL SELECIONADO
-function removePainel(painel){
-    $(painel).appendTo(".paineis_disponiveis");
-    var id = $(painel).data('id');
-    var n = 0;
+// VOLTA PARA A LISTA DE DISPONÍVEIS
+function makeDisponivel(painel){
+    var painelDisponivel = document.createElement("div");
+    painelDisponivel.className = painel.className;
+    painelDisponivel.id = painel.id;
+    painelDisponivel.dataset.id = $(painel).data('id');
+    painelDisponivel.dataset.state = 'disponivel';
+    painelDisponivel.innerHTML = painel.innerHTML;
+
+    painelDisponivel.addEventListener('click', function(e){
+        e.preventDefault();
+        var removerDisponivel = document.getElementById(this.id);
+        document.getElementById("painelDisponivel").removeChild(removerDisponivel);
+        makeSelected(this);
+    });
+
+    document.getElementById("painelDisponivel").appendChild(painelDisponivel);
     var ativos = [];
-    for(var r=0; r<4; r++){
-        n = r+1;
-        if(($('#idPainel'+n).val() != 0) && ($('#idPainel'+n).val() != id)){
-            ativos.push($('#idPainel'+n).val());
+    $('.h-painel').each(function(){
+        ativos.push($(this).val());
+    });
+
+    var newAtivos  = [];
+    $.each(ativos, function(i, index){
+        if(index === $(painel).data('id').toString()) {
+            index = '0';
         }
-    }
+        newAtivos.push(index);
+    });
 
-    // Adiciono reordenado
-    n = 0;
-    for(var d=0; d<4; d++){
-      n = d+1;
-      $('#idPainel'+n).val('0');
+    for(var i=0; i<newAtivos.length; i++){
+        $('#idPainel'+(i+1).toString()).val(newAtivos[i]);
     }
-
-    n = 0;
-    for(var a=0; a<ativos.length; a++){
-        n = a+1;
-        $('#idPainel'+n).val(ativos[a]);
-    }
-
 }
 
 // MONTA A LISTA DE USUARIOS
@@ -1514,9 +1753,10 @@ function getUsuarios(){
                         }).done(function(data) {
                             if(data.status == true){
                               closeModal();
+                              showMessage('USUÁRIO ATUALIZADO COM SUCESSO!');
                               getUsuarios();
                             }else{
-                              showMessage(data.msg);
+                              showMessage('REQUISIÇÃO FEITA COM SUCESSO!');
                             }
                         });
                     });
@@ -1558,11 +1798,12 @@ function getUsuarios(){
                             encode		: true
                         }).done(function(data) {
                             if(data.status == true){
-                              closeModal();
-                              getUsuarios();
-                            }else{
-                              showMessage(data.msg);
-                            }
+                                closeModal();
+                                showMessage('USUÁRIO ADICIONADO COM SUCESSO!');
+                                getUsuarios();
+                              }else{
+                                showMessage('REQUISIÇÃO FEITA COM SUCESSO!');
+                              }
                         });
                     });
                 }, $('.modal').fadeIn());
@@ -1617,8 +1858,10 @@ function getCategorias(){
             encode		: true
         }).done(function(data) {
             var linhas = "";
+            
             for(var i=0; i<data.categoria.length; i++){
                 var cat = data.categoria[i];
+                filaUnica = cat.flgFilaUnica;
                 linhas += "<tr><td class='align_left'>"+cat.nomeCategoria+"</td><td>"+cat.tipoCategoria+"</td><td>"+cat.minAmarelo+"</td><td>"+cat.minVermelho+"</td><td><a class='edit' data-data='"+JSON.stringify(cat)+"' href=''><i class='fas fa-edit'></i></a></td></tr>";
             }
             $('#cnf_lista_categorias').hideLoading();
@@ -1630,6 +1873,7 @@ function getCategorias(){
                 var data    = $(this).data('data');
                 $('.modal .modal_content').load('modal/crud-categorias.html', function(){
                     var paineisAtivos = [];
+                    var p2 = [];
 
                     // Varre data para popular campos para edição
                     if (typeof data != undefined) {
@@ -1646,6 +1890,7 @@ function getCategorias(){
                             if(k=='paineis'){
                               $.each(v, function(k, v) {
                                   paineisAtivos.push(v.id);
+                                  p2.push(v);
                               });
                             }
                         });
@@ -1661,26 +1906,68 @@ function getCategorias(){
                         encode		: true
                     }).done(function(data) {
                         var paineis_disponiveis = '';
-                        if (typeof data != undefined && data.display.length > 0) {
-                            for(var i=0; i<data.display.length; i++){
-                                var painel  = data.display[i];
-                                paineis_disponiveis += '<div id="painel'+painel.id+'" class="bt_painel" data-id="'+painel.id+'"><a title="'+painel.id+'" href="#">'+painel.hostname+'</a></div>';
+                        var paineis_escolhidos = '';
+                        var lpaineisDisponiveis = [];
+                        var lpaineisEscolhidos = [];
+
+                        if(paineisAtivos.length > 0){
+                            // ESCOLHIDOS
+                            lpaineisEscolhidos = p2;
+
+                            //DISPONÍVEIS
+                            $.grep(data.display, function(el) {
+                                if ($.inArray(el.id, paineisAtivos) == -1) {
+                                    lpaineisDisponiveis.push(el);
+                                }
+                            });
+                            
+                        } else {
+                            lpaineisDisponiveis = data.display;
+                            lpaineisEscolhidos = [];
+                        }
+                        
+                        if (typeof data != undefined && lpaineisDisponiveis.length > 0) {
+                            for(var i=0; i<lpaineisDisponiveis.length; i++){
+                                var painel  = lpaineisDisponiveis[i];
+                                paineis_disponiveis += '<div id="painel'+painel.id+'" class="bt_painel" data-id="'+painel.id+'" data-state="disponivel"><a title="'+painel.id+'" href="#">'+painel.hostname+'</a></div>';
                             }
                         }
-                        $('.paineis_disponiveis').html(paineis_disponiveis);
+                        if (typeof data != undefined && lpaineisEscolhidos.length > 0) {
+                            for(var i=0; i<lpaineisEscolhidos.length; i++){
+                                var painel  = lpaineisEscolhidos[i];
+                                paineis_escolhidos += '<div id="painel'+painel.id+'" class="bt_painel" data-id="'+painel.id+'" data-state="escolhido"><a title="'+painel.id+'" href="#">'+painel.hostname+'</a></div>';
+                            }
+                        }
+                        
+                        var $disponiveis = document.getElementById('painelDisponivel');
+                        var $escolhidos = document.getElementById('showPaineis');
+                        // $('#painelDisponivel').html(paineis_disponiveis);
 
-                        // Adicionar função pra jogar painéis já existentes no
-                        for(var pa = 0; pa<paineisAtivos.length; pa++){
-                          addPainel($('#painel'+paineisAtivos[pa]));
+                        $disponiveis.innerHTML = paineis_disponiveis;
+                        $escolhidos.innerHTML = paineis_escolhidos;
+
+                        var lista = $escolhidos.childNodes;
+                        var idPainel = [];
+                        $.each(lista, function(k,item){
+                            idPainel.push($(item).data('id'));
+                        });
+
+                        for(var i=0; i<idPainel.length; i++){
+                            $('#idPainel'+(i+1).toString()).val(idPainel[i]);
                         }
 
-                        $('.paineis_disponiveis').click('.bt_painel', function(e){
+                        $('div[data-state=disponivel]').click(function(e){
                             e.preventDefault();
-                            addPainel(this);
+                            var removerDisponivel = document.getElementById(this.id);
+                            $disponiveis.removeChild(removerDisponivel);
+                            makeSelected(this);
                         });
-                        $('#showPaineis').click('.bt_painel', function(e){
+
+                        $('div[data-state=escolhido]').click(function(e){
                             e.preventDefault();
-                            removePainel(this);
+                            var removerEscolhido = document.getElementById(this.id);
+                            $escolhidos.removeChild(removerEscolhido);
+                            makeDisponivel(this);
                         });
                     });
 
@@ -1706,6 +1993,7 @@ function getCategorias(){
                             "tipoFila"          : $('#tipoCategoria').val(),
                             "idCategoria"       : $('#idCategoria').val(),
                             "idLocalAtendimento": $('#idLocalAtendimento').val(),
+                            "flgFilaUnica"      : filaUnica,
                             "flgIsCliente"      : true,
                             "flgIdentificacao"  : true,
                             "idNivelSegmento"   : 1,
@@ -1713,6 +2001,8 @@ function getCategorias(){
                             "porcentagemExclusaoAtendimento"    : 0,
                             "idUsuarioResponsavel"              : currentUser.usuarioID
                         };
+
+                        console.log('FORM DATA', formData);
 
                         //ENVIA DADOS DA CATEGORIA EDITADA
                         $.ajax({
@@ -1726,6 +2016,11 @@ function getCategorias(){
                             if(data.status == true){
                                 closeModal();
                                 getCategorias();
+                                showMessage('CATEGORIA ATUALIZADA COM SUCESSO');
+                            } else {
+                                closeModal();
+                                getCategorias();
+                                showMessage('REQUISIÇÃO FEITA COM SUCESSO!');
                             }
                         });
                     });
@@ -1819,19 +2114,19 @@ function getTerminais(){
                                     var carac = quebraPolitica[p];
                                     var letra = '<button disabled>'+carac+'</button>';
                                     if(carac == '/'){
-                                      addElement(barra);
+                                      addElement(carac, "tool_item bt_barra barra");
                                     }else if(carac == '!'){
-                                      addElement(excla);
+                                      addElement(carac, "tool_item bt_exclamacao exclamacao");
                                     }else if(carac == '['){
-                                      addElement(colcA);
+                                      addElement(carac, "tool_item bt_colcheteAbre abreColchete");
                                     }else if(carac == ']'){
-                                      addElement(colcF);
+                                      addElement(carac, "tool_item bt_colcheteFecha fechaColchete");
                                     }else if(carac == '{'){
-                                      addElement(chavA);
+                                      addElement(carac, "tool_item bt_chaveAbre abreChave");
                                     }else if(carac == '}'){
-                                      addElement(chavF);
+                                      addElement(carac, "tool_item bt_chaveFecha fechaChave");
                                     }else{
-                                      addElement(letra);
+                                      addElement(carac);
                                     }
                                 }
                             }
@@ -1842,6 +2137,8 @@ function getTerminais(){
                         e.preventDefault();
                         closeModal();
                     });
+
+                    $('.mostraGrupoFU').css('display', 'none');
 
                     // MONTA SELECT COM OS TIPOS DE POSIÇÃO
                     var listaCxPosicao = '';
@@ -1873,48 +2170,106 @@ function getTerminais(){
                         if(data){
                             var LETRAS = '';
                             var listaLetras = '';
-                            for(var l = 0; l<data.categoria.length; l++){
-                              LETRAS = data.categoria[l];
-                              listaLetras += '<button>'+$.trim(LETRAS.tipoCategoria)+'</button>';// data-id="'+LETRAS.idCategoria+'"
+                            var letrasFU = '';
+
+                            var categoriaFu = $.grep(data.categoria, function(categoria, i){
+                            if(categoria.hasOwnProperty('flgFilaUnica')) {
+                                return categoria.flgFilaUnica ? categoria : null;
+                            } else { return null; }
+                            });
+
+                            var naoCategoriaFu = $.grep(data.categoria, function(categoria, i){
+                                if(categoria.hasOwnProperty('flgFilaUnica')) {
+                                    return !categoria.flgFilaUnica ? categoria : null;
+                                } else { return null; }
+                            });
+
+                            if(categoriaFu.length === 0 && naoCategoriaFu.length === 0) {
+                                for(var l = 0; l<data.categoria.length; l++){
+                                    LETRAS = data.categoria[l];
+                                    listaLetras += '<button>'+$.trim(LETRAS.tipoCategoria)+'</button>';//data-id="'+LETRAS.idCategoria+'"
+                                }
+                                $('#teclado_letras').html(listaLetras);
+                                var TOOLS = '<button class="tool_item bt_colcheteAbre abreColchete">[</button><button class="tool_item bt_colcheteFecha fechaColchete" disabled>]</button><button class="tool_item bt_chaveAbre abreChave">{</button><button class="tool_item bt_chaveFecha fechaChave" disabled>}</button><button class="tool_item bt_barra barra">/</button><button class="tool_item bt_exclamacao exclamacao">!</button><button class="tool_item bt_asterisco asterisco">*</button>';
+                                $('#teclado_tools').html(TOOLS);
+                            } else {
+                                for(var l = 0; l<naoCategoriaFu.length; l++){
+                                    LETRAS = naoCategoriaFu[l];
+                                    listaLetras += '<button>'+$.trim(LETRAS.tipoCategoria)+'</button>';//data-id="'+LETRAS.idCategoria+'"
+                                }
+                                $('#teclado_letras').html(listaLetras);
+                                var TOOLS = '<button class="tool_item bt_colcheteAbre abreColchete">[</button><button class="tool_item bt_colcheteFecha fechaColchete" disabled>]</button><button class="tool_item bt_chaveAbre abreChave">{</button><button class="tool_item bt_chaveFecha fechaChave" disabled>}</button><button class="tool_item bt_barra barra">/</button><button class="tool_item bt_exclamacao exclamacao">!</button><button class="tool_item bt_asterisco asterisco">*</button><button class="tool_item bt_grupoFU grupoFU">#</button>';
+                                $('#teclado_tools').html(TOOLS);
                             }
-                            $('#teclado_letras').html(listaLetras);
-                            var TOOLS = '<button class="tool_item bt_colcheteAbre abreColchete">[</button><button class="tool_item bt_colcheteFecha fechaColchete" disabled>]</button><button class="tool_item bt_chaveAbre abreChave">{</button><button class="tool_item bt_chaveFecha fechaChave" disabled>}</button><button class="tool_item bt_barra barra">/</button><button class="tool_item bt_exclamacao exclamacao">!</button><button class="tool_item bt_asterisco asterisco">*</button>';
-                            $('#teclado_tools').html(TOOLS);
+
                             $('.barra').click(function(e){
                                 e.preventDefault();
-                                addElement(this);
+                                var b = this;
+                                addElement(b.innerText, "tool_item bt_barra barra");
                             });
-
+    
                             $('.exclamacao').click(function(e){
                                 e.preventDefault();
-                                addElement(this);
+                                var b = this;
+                                addElement(b.innerText, "tool_item bt_exclamacao exclamacao");
                             });
-
+    
                             $('.abreColchete').click(function(e){
                                 e.preventDefault();
-                                addElement(this);
+                                var b = this;
+                                addElement(b.innerText, "tool_item bt_colcheteAbre abreColchete");
                             });
-
+    
                             $('.fechaColchete').click(function(e){
                                 e.preventDefault();
-                                addElement(this);
+                                var b = this;
+                                addElement(b.innerText, "tool_item bt_colcheteFecha fechaColchete");
                             });
-
+    
                             $('.abreChave').click(function(e){
                                 e.preventDefault();
-                                addElement(this);
+                                var b = this;
+                                addElement(b.innerText, "tool_item bt_chaveAbre abreChave");
                             });
-
+    
                             $('.fechaChave').click(function(e){
                                 e.preventDefault();
-                                addElement(this);
+                                var b = this;
+                                addElement(b.innerText, "tool_item bt_chaveFecha fechaColchete");
                             });
 
+                            $('.grupoFU').click(function(e){
+                                e.preventDefault();
+                                var b = this;
+                                addElement(b.innerText, "tool_item bt_grupoFU grupoFU");
+                                setTimeout(function(){
+                                    $('.mostraGrupoFU').css('display', 'none');
+                                    $('.letrasFU').text('');
+                                }, 1000);
+                            }).mouseenter(function(e) {
+                                e.preventDefault();
+                                $('.mostraGrupoFU').css('display', 'block');
+                                for(var l = 0; l<categoriaFu.length; l++){
+                                    LETRAS = categoriaFu[l];
+                                    letrasFU += $.trim(LETRAS.tipoCategoria);//data-id="'+LETRAS.idCategoria+'"
+                                }
+                                $('.letrasFU').text(letrasFU);
+                            }).mouseleave(function(e){
+                                e.preventDefault();
+                                letrasFU = '';
+                                LETRAS = '';
+                                setTimeout(function(){
+                                    $('.mostraGrupoFU').css('display', 'none');
+                                    $('.letrasFU').text('');
+                                }, 1000);
+                            });
+    
                             $('#teclado_letras button').click(function(e){
                                 e.preventDefault();
-                                addElement(this);
+                                var b = this;
+                                addElement(b.innerText);
                             });
-
+    
                             $('.limparUltimo').click(function(e){
                                 e.preventDefault();
                                 removeElement();
@@ -1952,13 +2307,12 @@ function getTerminais(){
                                 }).done(function(data) {
                                     if(data.status == true){
                                         closeModal();
-                                        showMessage(data.msg);
+                                        showMessage('TERMINAL ATUALIZADO COM SUCESSO!');
                                         getTerminais();
                                     }else{
                                         closeModal();
-                                        showMessage(data.msg);
-                                        getTerminais();
-                                    }
+                                        showMessage('REQUISIÇÃO FEITA COM SUCESSO!');
+                                        getTerminais();                                    }
                                 });
                             }else{
                                 showMessage('Política mal formatada. Verifique e tente novamente.');
@@ -1976,6 +2330,8 @@ function getTerminais(){
                         e.preventDefault();
                         closeModal();
                     });
+
+                    $('.mostraGrupoFU').css('display', 'none');
 
                     // TRAZ A LISTA DO TIPO DE POSIÇÃO PARA O CAIXA
                     var listaCxPosicao = '';
@@ -2005,47 +2361,104 @@ function getTerminais(){
                     }).done(function(data) {
                         var LETRAS = '';
                         var listaLetras = '';
-                        for(var l = 0; l<data.categoria.length; l++){
-                            LETRAS = data.categoria[l];
-                            listaLetras += '<button>'+$.trim(LETRAS.tipoCategoria)+'</button>';//data-id="'+LETRAS.idCategoria+'"
+                        var letrasFU = '';
+
+                        var categoriaFu = $.grep(data.categoria, function(categoria, i){
+                           if(categoria.hasOwnProperty('flgFilaUnica')) {
+                            return categoria.flgFilaUnica ? categoria : null;
+                           } else { return null; }
+                        });
+
+                        var naoCategoriaFu = $.grep(data.categoria, function(categoria, i){
+                            if(categoria.hasOwnProperty('flgFilaUnica')) {
+                                return !categoria.flgFilaUnica ? categoria : null;
+                            } else { return null; }
+                         });
+
+                        if(categoriaFu.length === 0 && naoCategoriaFu.length === 0) {
+                            for(var l = 0; l<data.categoria.length; l++){
+                                LETRAS = data.categoria[l];
+                                listaLetras += '<button>'+$.trim(LETRAS.tipoCategoria)+'</button>';//data-id="'+LETRAS.idCategoria+'"
+                            }
+                            $('#teclado_letras').html(listaLetras);
+                            var TOOLS = '<button class="tool_item bt_colcheteAbre abreColchete">[</button><button class="tool_item bt_colcheteFecha fechaColchete" disabled>]</button><button class="tool_item bt_chaveAbre abreChave">{</button><button class="tool_item bt_chaveFecha fechaChave" disabled>}</button><button class="tool_item bt_barra barra">/</button><button class="tool_item bt_exclamacao exclamacao">!</button><button class="tool_item bt_asterisco asterisco">*</button>';
+                            $('#teclado_tools').html(TOOLS);
+                        } else {
+                            for(var l = 0; l<naoCategoriaFu.length; l++){
+                                LETRAS = naoCategoriaFu[l];
+                                listaLetras += '<button>'+$.trim(LETRAS.tipoCategoria)+'</button>';//data-id="'+LETRAS.idCategoria+'"
+                            }
+                            $('#teclado_letras').html(listaLetras);
+                            var TOOLS = '<button class="tool_item bt_colcheteAbre abreColchete">[</button><button class="tool_item bt_colcheteFecha fechaColchete" disabled>]</button><button class="tool_item bt_chaveAbre abreChave">{</button><button class="tool_item bt_chaveFecha fechaChave" disabled>}</button><button class="tool_item bt_barra barra">/</button><button class="tool_item bt_exclamacao exclamacao">!</button><button class="tool_item bt_asterisco asterisco">*</button><button class="tool_item bt_grupoFU grupoFU">#</button>';
+                            $('#teclado_tools').html(TOOLS);
                         }
-                        $('#teclado_letras').html(listaLetras);
-                        var TOOLS = '<button class="tool_item bt_colcheteAbre abreColchete">[</button><button class="tool_item bt_colcheteFecha fechaColchete" disabled>]</button><button class="tool_item bt_chaveAbre abreChave">{</button><button class="tool_item bt_chaveFecha fechaChave" disabled>}</button><button class="tool_item bt_barra barra">/</button><button class="tool_item bt_exclamacao exclamacao">!</button><button class="tool_item bt_asterisco asterisco">*</button>';
-                        $('#teclado_tools').html(TOOLS);
 
                         $('.barra').click(function(e){
                             e.preventDefault();
-                            addElement(this);
+                            var b = this;
+                            addElement(b.innerText, "tool_item bt_barra barra");
                         });
 
                         $('.exclamacao').click(function(e){
                             e.preventDefault();
-                            addElement(this);
+                            var b = this;
+                            addElement(b.innerText, "tool_item bt_exclamacao exclamacao");
                         });
 
                         $('.abreColchete').click(function(e){
                             e.preventDefault();
-                            addElement(this);
+                            var b = this;
+                            addElement(b.innerText, "tool_item bt_colcheteAbre abreColchete");
                         });
 
                         $('.fechaColchete').click(function(e){
                             e.preventDefault();
-                            addElement(this);
+                            var b = this;
+                            addElement(b.innerText, "tool_item bt_colcheteFecha fechaColchete");
                         });
 
                         $('.abreChave').click(function(e){
                             e.preventDefault();
-                            addElement(this);
+                            var b = this;
+                            addElement(b.innerText, "tool_item bt_chaveAbre abreChave");
                         });
 
                         $('.fechaChave').click(function(e){
                             e.preventDefault();
-                            addElement(this);
+                            var b = this;
+                            addElement(b.innerText, "tool_item bt_chaveFecha fechaColchete");
+                        });
+
+                        $('.grupoFU').click(function(e){
+                            e.preventDefault();
+                            var b = this;
+                            addElement(b.innerText, "tool_item bt_grupoFU grupoFU");
+                            setTimeout(function(){
+                                $('.mostraGrupoFU').css('display', 'none');
+                                $('.letrasFU').text('');
+                            }, 1000);
+                        }).mouseenter(function(e) {
+                            e.preventDefault();
+                            $('.mostraGrupoFU').css('display', 'block');
+                            for(var l = 0; l<categoriaFu.length; l++){
+                                LETRAS = categoriaFu[l];
+                                letrasFU += $.trim(LETRAS.tipoCategoria);//data-id="'+LETRAS.idCategoria+'"
+                            }
+                            $('.letrasFU').text(letrasFU);
+                        }).mouseleave(function(e){
+                            e.preventDefault();
+                            letrasFU = '';
+                            LETRAS = '';
+                            setTimeout(function(){
+                                $('.mostraGrupoFU').css('display', 'none');
+                                $('.letrasFU').text('');
+                            }, 1000);
                         });
 
                         $('#teclado_letras button').click(function(e){
                             e.preventDefault();
-                            addElement(this);
+                            var b = this;
+                            addElement(b.innerText);
                         });
 
                         $('.limparUltimo').click(function(e){
@@ -2081,11 +2494,11 @@ function getTerminais(){
                                 }).done(function(data) {
                                     if(data.status == true){
                                         closeModal();
-                                        showMessage(data.msg);
+                                        showMessage('TERMINAL ADICIONADO COM SUCESSO!');
                                         getTerminais();
                                     }else{
                                         closeModal();
-                                        showMessage(data.msg);
+                                        showMessage('REQUISIÇÃO FEITA COM SUCESSO!');
                                         getTerminais();
                                     }
                                 });
@@ -2101,8 +2514,20 @@ function getTerminais(){
 }
 
 // ADICIONA NA TAG QUE MOSTRA A POLITICA O ELEMENTO QUE FOI CLICADO
-function addElement(elem){
-    $(elem).clone().appendTo("#showPolitica");
+function addElement(elem, classe){
+    var element = document.createElement("button");
+    element.setAttribute('disabled', 'disabled');
+    if(classe) element.setAttribute('class', classe);
+    element.innerText = elem;
+
+    if(element.innerHTML.length > 1) {
+        var nElem = $(element).clone();
+        nElem[0].innerHTML = '('+element.innerHTML+')';
+        $(nElem[0].outerHTML).appendTo('#showPolitica');
+    } else {
+        $(element).clone().appendTo("#showPolitica");
+    }
+
     $("#showPolitica button").attr("disabled", true);
     // MOSTRA UM X ou UM CHECK INDICADO CONFIGURAÇÃO CORRETA
     if(!verificaPolitica()){
@@ -2125,15 +2550,20 @@ function removeElement(){
 // VERIFICA A CONFIGURAÇÃO DA POLITICA
 function verificaPolitica(){
     var strAtual = $("#showPolitica button").text();
+    console.log('STR ATUAL', strAtual);
     if(strAtual.indexOf('/') != -1 || strAtual.indexOf('!') != -1){
       ativarTeclado('bt_barra, bt_exclamacao');
       return true;
     }
 
     if(strAtual==''){
-        ativarTeclado('bt_chaveAbre, bt_colcheteAbre, bt_barra, bt_exclamacao');
+        ativarTeclado('bt_chaveAbre, bt_colcheteAbre, bt_barra, bt_exclamacao, bt_grupoFU');
         return false;
+    } else if (strAtual == '#') {
+        ativarTeclado('bt_chaveAbre, bt_colcheteAbre, bt_barra, bt_exclamacao, bt_grupoFU');
+        return true;
     }
+
     var spl = strAtual.split('');
 
     var colc    = false;
@@ -2155,8 +2585,9 @@ function verificaPolitica(){
         if(spl.length>1){
             var last1 = spl[spl.length-1];
             var last2 = spl[spl.length-2];
+
             if(chav){
-                if(last2.match(/[A-Z]/i) && last1.match(/[A-Z]/i)){
+                if(last2.match(/[A-Z\)\#]/ig) && last1.match(/[A-Z\)\#]/ig)){
                     ativarTeclado('bt_chaveFecha');
                     return false;
                 }else{
@@ -2166,9 +2597,9 @@ function verificaPolitica(){
             }
 
             if(colc){
-                if(last1.match(/[A-Z]/i) || last1 == '}'){
+                if(last1.match(/[A-Z\)\#]/ig) || last1 == '}'){
                     if(!chav){
-                        ativarTeclado('bt_chaveAbre, bt_colcheteFecha');
+                        ativarTeclado('bt_chaveAbre, bt_colcheteFecha, bt_grupoFU');
                         return false;
                     }
                 }else{
@@ -2189,12 +2620,12 @@ function verificaPolitica(){
                 ativarTeclado('');
                 return false;
             }else{
-                ativarTeclado('bt_chaveAbre, bt_colcheteAbre');
+                ativarTeclado('bt_chaveAbre, bt_colcheteAbre, bt_grupoFU');
                 return false;
             }
         }
     }else{
-        ativarTeclado('bt_chaveAbre, bt_colcheteAbre');
+        ativarTeclado('bt_chaveAbre, bt_colcheteAbre, bt_grupoFU');
     }
     return true;
 }
@@ -2356,9 +2787,10 @@ function getPaineis(){
                         }).done(function(data) {
                             if(data.status == true){
                                 closeModal();
+                                showMessage('PAINEL EDITADO COM SUCESSO!');
                                 getPaineis();
                             }else{
-                                showMessage(data.msg);
+                                showMessage('REQUISIÇÃO FEITA COM SUCESSO!');
                             }
                         });
                     });
@@ -2430,9 +2862,10 @@ function getPaineis(){
                         }).done(function(data) {
                             if(data.status == true){
                                 closeModal();
+                                showMessage('PAINEL ADICIONADO COM SUCESSO!');
                                 getPaineis();
                             }else{
-                                showMessage(data.msg);
+                                showMessage('REQUISIÇÃO FEITA COM SUCESSO!');
                             }
                         });
                     });
@@ -2460,7 +2893,7 @@ function atendimentoChamar(){
         "idUsuario"         : currentUser.usuarioID,
         "token"             : currentUser.emissorToken,
         "usaLocucao"        : usaLocucao,
-        "crmFidelize"       : true
+        "crmFidelize"       : FIDELIZE
     };
     $.ajax({
         type		: 'POST', // define the type of HTTP verb we want to use (POST for our form)
@@ -2470,94 +2903,101 @@ function atendimentoChamar(){
         dataType	: 'json', // what type of data do we expect back from the server
         encode		: true
     }).done(function(data) {
-        console.log('chamar', data);
-        if(data.idAtendimento != undefined){
-            lastAction = 'chamar';
-            emAtendimento   = true;
-            idAtendimento   = data.idAtendimento;
-
-            $('.info_chamada .n_atendimento_value').html(data.idAtendimento);
-            $('.info_chamada .senha_value').html(data.senha);
-            $('.info_chamada .data_value').html(data.dtImpressao);
-            $('.info_chamada .categoria_value').html(data.nomeCategoria);
-
-            console.log(data.crm.nome_cliente, data.crm.cpf, data.crm.ag, data.crm.cc, data.crm.cnpj);
-
-            if(data.crm === null || data.crm === undefined || data.crm === {} ) {
-                $('.info-crm').css({'display':'none'});
-            } else {
-                if (USAFOTO) {
-                    var img = $("<img class='crm-pic' src='"+ BASE_URL + 'utils/imagem/' + data.senha +"'>");
-                    $('.info-crm').prepend(img);
-                }
-
-                if(data.crm.status === false) {
-                    $('#col-nocrm').css({'display':'inherit'});
-                    $('#col-nome').css({'display':'none'}); 
-                    $('#col-documento').css({'display':'none'});
-                    $('#col-correntista').css({'display':'none'});
-                    $('#col-segmento').css({'display':'none'});
-                    $('#col-ag').css({'display':'none'});
-                    $('#col-cc').css({'display':'none'});
+        if(data.hasOwnProperty('fu')) {
+            openModalFilaUnica();
+        } else {
+            if(data.idAtendimento != undefined){
+                lastAction = 'chamar';
+                emAtendimento   = true;
+                idAtendimento   = data.idAtendimento;
+    
+                $('.info_chamada .n_atendimento_value').html(data.idAtendimento);
+                $('.info_chamada .senha_value').html(data.senha);
+                $('.info_chamada .data_value').html(data.dtImpressao);
+                $('.info_chamada .categoria_value').html(data.nomeCategoria);
+    
+                if(data.crm === null || data.crm === undefined || data.crm === {} ) {
+                    $('.info-crm').css({'display':'none'});
                 } else {
-                    $('#col-nocrm').css({'display':'none'});
-
-                    if (data.crm.nome_cliente !== undefined) {
-                        $('.info_chamada .nome_value').html(data.crm.nome_cliente);
-                    } else if(data.crm.nome !== undefined) {
-                        $('.info_chamada .nome_value').html(data.crm.nome);
-                    } else {
-                        $('#col-nome').css({'display':'none'});
+                    if(data.fotoBase64 !== null) {
+                        if (USAFOTO) {
+                            var img = $("<img class='crm-pic' src='"+ BASE_URL + 'utils/imagem/' + data.senha +"'>");
+                            $('.info-crm').prepend(img);
+                        }
                     }
-        
-                    if(data.crm.cpf !== undefined) {
-                        $('.info_chamada .documento_nome > strong').text('CPF:');
-                        $('.info_chamada .documento_value').html(data.crm.cpf + ' - ( <span class="situacao-'+ data.crm.situacao +'">' + data.crm.situacao + '</span> )');
-                    } else if(data.crm.cnpj !== undefined) {
-                        $('.info_chamada .documento_nome > strong').text('CNPJ');
-                        $('.info_chamada .documento_value').html(data.crm.cnpj);
-                    } else {
+                    
+                    if(data.crm.status === false) {
+                        $('#col-nocrm').css({'display':'inherit'});
+                        $('#col-nome').css({'display':'none'}); 
                         $('#col-documento').css({'display':'none'});
-                    }
-    
-                    if(data.crm.correntista !== undefined) {
-                        $('.info_chamada .correntista_nome > strong').text('Correntista: ');
-                        $('.info_chamada .correntista_value').html((data.crm.correntista ? 'Sim' : 'Não') + ' - <strong>Consignado:</strong> ' + (data.crm.consignado === 'S' ? 'Sim' : 'Não'));
-                    } else {
                         $('#col-correntista').css({'display':'none'});
-                    }
-    
-                    if(data.crm.segmento !== undefined) {
-                        $('.info_chamada .segmento_nome > strong').text('Segmento:');
-                        $('.info_chamada .segmento_value').html(data.crm.segmento);
-                    } else {
                         $('#col-segmento').css({'display':'none'});
-                    }
-        
-                    if(data.crm.ag !== undefined) {
-                        $('.info_chamada .ag_value').html(data.crm.ag);
-                    } else {
                         $('#col-ag').css({'display':'none'});
-                    }
-        
-                    if(data.crm.cc !== undefined) {
-                        $('.info_chamada .cc_value').html(data.crm.ag);
-                    } else {
                         $('#col-cc').css({'display':'none'});
+                    } else {
+                        $('#col-nocrm').css({'display':'none'});
+    
+                        if (data.crm.nome_cliente !== undefined) {
+                            $('.info_chamada .nome_value').html(data.crm.nome_cliente);
+                        } else if(data.crm.nome !== undefined) {
+                            $('.info_chamada .nome_value').html(data.crm.nome);
+                        } else {
+                            $('#col-nome').css({'display':'none'});
+                        }
+            
+                        if(data.crm.cpf !== undefined) {
+                            $('.info_chamada .documento_nome > strong').text('CPF:');
+                            if (FIDELIZE) {
+                                $('.info_chamada .documento_value').html(data.crm.cpf + ' - ( <span class="situacao-'+ data.crm.situacao +'">' + data.crm.situacao + '</span> )');
+                            } else {
+                                $('.info_chamada .documento_value').html(data.crm.cpf);
+                            }
+                        } else if(data.crm.cnpj !== undefined) {
+                            $('.info_chamada .documento_nome > strong').text('CNPJ');
+                            $('.info_chamada .documento_value').html(data.crm.cnpj);
+                        } else {
+                            $('#col-documento').css({'display':'none'});
+                        }
+        
+                        if(data.crm.correntista !== undefined) {
+                            $('.info_chamada .correntista_nome > strong').text('Correntista: ');
+                            $('.info_chamada .correntista_value').html((data.crm.correntista ? 'Sim' : 'Não') + ' - <strong>Consignado:</strong> ' + (data.crm.consignado === 'S' ? 'Sim' : 'Não'));
+                        } else {
+                            $('#col-correntista').css({'display':'none'});
+                        }
+        
+                        if(data.crm.segmento !== undefined) {
+                            $('.info_chamada .segmento_nome > strong').text('Segmento:');
+                            $('.info_chamada .segmento_value').html(data.crm.segmento);
+                        } else {
+                            $('#col-segmento').css({'display':'none'});
+                        }
+            
+                        if(data.crm.ag !== undefined) {
+                            $('.info_chamada .ag_value').html(data.crm.ag);
+                        } else {
+                            $('#col-ag').css({'display':'none'});
+                        }
+            
+                        if(data.crm.cc !== undefined) {
+                            $('.info_chamada .cc_value').html(data.crm.cc);
+                        } else {
+                            $('#col-cc').css({'display':'none'});
+                        }
                     }
                 }
+                if(data.tipoFilaRedirecionamento == true){
+                    $('.info_chamada .senha_redirecionada').fadeIn();
+                }
+                if(data.flgPriorizada == true){
+                    $('.info_chamada .senha_priorizada').fadeIn();
+                }
+                senhaAtual = data.senha;
+                ativar('bt_chamar_voz, bt_rechamar, bt_iniciar_atendimento, bt_cancelar');
+                $('.info_chamada .info_content').slideDown();
+            }else{
+                showMessage(data.status);
             }
-            if(data.tipoFilaRedirecionamento == true){
-                $('.info_chamada .senha_redirecionada').fadeIn();
-            }
-            if(data.flgPriorizada == true){
-                $('.info_chamada .senha_priorizada').fadeIn();
-            }
-            senhaAtual = data.senha;
-            ativar('bt_chamar_voz, bt_rechamar, bt_iniciar_atendimento, bt_cancelar');
-            $('.info_chamada .info_content').slideDown();
-        }else{
-            showMessage(data.status);
         }
     });
 }
@@ -2601,9 +3041,15 @@ function atendimentoIniciarAtendimento(){
         dataType	: 'json', // what type of data do we expect back from the server
         encode		: true
     }).done(function(data) {
+        if (data.erro) {
+            showMessage(data.erro);
+            return false;
+        }
+
         if(data.idAtendimento>0){
             lastAction = 'iniciar_atendimento';
             catAtendimento  = data.categoria;
+            nomeCatAtendimento = data.nomeCategoria;
             contagemAtendimentoStart();
             ativar('bt_redirecionar, bt_finalizar');
             $('.info_inicio .date_call_value').html(data.dtChamada);
@@ -2626,42 +3072,6 @@ function atendimentoIniciarAtendimento(){
             contagemBuscaStop();
         }
     });
-}
-
-// FORMATAR O TEMPO PARA O RELOGIO DE CONTAGEM DO ATENDIMENTO
-function formatatempo(segs) {
-    var min = 0;
-    var hr  = 0;
-    while(segs>=60) {
-      if (segs >=60) {
-          segs = segs-60;
-          min = min+1;
-      }
-    }
-    while(min>=60) {
-      if (min >=60) {
-          min = min-60;
-          hr = hr+1;
-      }
-    }
-    if (hr < 10) {hr = "0"+hr}
-    if (min < 10) {min = "0"+min}
-    if (segs < 10) {segs = "0"+segs}
-    var fin = hr+":"+min+":"+segs
-    return fin;
-}
-function contagem(){
-    segsAtend++;
-    var t = formatatempo(segsAtend);
-    $("#timer").html(t);
-}
-function contagemAtendimentoStart(){
-    contadorAtendimento = setInterval(contagem, 1000);
-}
-function contagemAtendimentoStop(){
-    segsAtend = 0;
-    $("#timer").html('00:00:00');
-    clearInterval(contadorAtendimento);
 }
 
 // MONTA A LISTA DE CATEGORIAS NA HORA DE REDIRECIONAR UMA SENHA
@@ -2714,7 +3124,8 @@ function atendimentoDescancelar(){
     var formData = {
         'idUsuario'         : currentUser.usuarioID,
         'idAtendimento'     : idAtendimento,
-        'token'             : currentUser.emissorToken
+        'token'             : currentUser.emissorToken,
+        "crmFidelize"       : FIDELIZE
     };
     $.ajax({
         type		: 'POST', // define the type of HTTP verb we want to use (POST for our form)
@@ -2734,30 +3145,75 @@ function atendimentoDescancelar(){
             $('.info_chamada .categoria_value').html(data.nomeCategoria);
             $('.info_chamada .data_value').html(data.dtImpressao);
 
-            if(data.crm.nome_cliente != undefined && data.crm.cpf !== undefined || data.crm.cnpj !== undefined && data.crm.ag !== undefined && data.crm.cc !== undefined){
-                var img = $("<img class='crm-pic' src='"+ BASE_URL + 'utils/imagem/' + data.senha +"'>");
-                $('.info-crm').prepend(img);
-
-                $('.info_chamada .nome_value').html(data.crm.nome_cliente);
-                $('.info_chamada .ag_value').html(data.crm.ag);
-                $('.info_chamada .cc_value').html(data.crm.cc);
-
-                if(data.crm.cpf !== undefined) {
-                  $('.info_chamada .documento_nome > strong').text('CPF');
-                  $('.info_chamada .documento_value').html(data.crm.cpf);
-                }
-
-                if(data.crm.cnpj !== undefined) {
-                  $('.info_chamada .documento_nome > strong').text('CNPJ');
-                  $('.info_chamada .documento_value').html(data.crm.cnpj);
-                }
-
-                $('.info_chamada .nome').fadeIn();
-                $('.info_chamada .documento').fadeIn();
-                $('.info_chamada .agencia').fadeIn();
-                $('.info_chamada .conta').fadeIn();
+            if(data.crm === null || data.crm === undefined || data.crm === {} ) {
+                $('.info-crm').css({'display':'none'});
             } else {
-              $('.info-crm').css({'display':'none'});
+                if(data.fotoBase64 !== null) {
+                    if (USAFOTO) {
+                        var img = $("<img class='crm-pic' src='"+ BASE_URL + 'utils/imagem/' + data.senha +"'>");
+                        $('.info-crm').prepend(img);
+                    }
+                }
+
+                if(data.crm.status === false) {
+                    $('#col-nocrm').css({'display':'inherit'});
+                    $('#col-nome').css({'display':'none'}); 
+                    $('#col-documento').css({'display':'none'});
+                    $('#col-correntista').css({'display':'none'});
+                    $('#col-segmento').css({'display':'none'});
+                    $('#col-ag').css({'display':'none'});
+                    $('#col-cc').css({'display':'none'});
+                } else {
+                    $('#col-nocrm').css({'display':'none'});
+
+                    if (data.crm.nome_cliente !== undefined) {
+                        $('.info_chamada .nome_value').html(data.crm.nome_cliente);
+                    } else if(data.crm.nome !== undefined) {
+                        $('.info_chamada .nome_value').html(data.crm.nome);
+                    } else {
+                        $('#col-nome').css({'display':'none'});
+                    }
+        
+                    if(data.crm.cpf !== undefined) {
+                        $('.info_chamada .documento_nome > strong').text('CPF:');
+                        if (FIDELIZE) {
+                            $('.info_chamada .documento_value').html(data.crm.cpf + ' - ( <span class="situacao-'+ data.crm.situacao +'">' + data.crm.situacao + '</span> )');
+                        } else {
+                            $('.info_chamada .documento_value').html(data.crm.cpf);
+                        }
+                    } else if(data.crm.cnpj !== undefined) {
+                        $('.info_chamada .documento_nome > strong').text('CNPJ');
+                        $('.info_chamada .documento_value').html(data.crm.cnpj);
+                    } else {
+                        $('#col-documento').css({'display':'none'});
+                    }
+    
+                    if(data.crm.correntista !== undefined) {
+                        $('.info_chamada .correntista_nome > strong').text('Correntista: ');
+                        $('.info_chamada .correntista_value').html((data.crm.correntista ? 'Sim' : 'Não') + ' - <strong>Consignado:</strong> ' + (data.crm.consignado === 'S' ? 'Sim' : 'Não'));
+                    } else {
+                        $('#col-correntista').css({'display':'none'});
+                    }
+    
+                    if(data.crm.segmento !== undefined) {
+                        $('.info_chamada .segmento_nome > strong').text('Segmento:');
+                        $('.info_chamada .segmento_value').html(data.crm.segmento);
+                    } else {
+                        $('#col-segmento').css({'display':'none'});
+                    }
+        
+                    if(data.crm.ag !== undefined) {
+                        $('.info_chamada .ag_value').html(data.crm.ag);
+                    } else {
+                        $('#col-ag').css({'display':'none'});
+                    }
+        
+                    if(data.crm.cc !== undefined) {
+                        $('.info_chamada .cc_value').html(data.crm.cc);
+                    } else {
+                        $('#col-cc').css({'display':'none'});
+                    }
+                }
             }
 
             ativar('bt_chamar_voz, bt_rechamar, bt_iniciar_atendimento, bt_cancelar');
@@ -2800,6 +3256,42 @@ function atendimentoSuspender(){
     });
 }
 
+// FORMATAR O TEMPO PARA O RELOGIO DE CONTAGEM DO ATENDIMENTO
+function formatatempo(segs) {
+    var min = 0;
+    var hr  = 0;
+    while(segs>=60) {
+      if (segs >=60) {
+          segs = segs-60;
+          min = min+1;
+      }
+    }
+    while(min>=60) {
+      if (min >=60) {
+          min = min-60;
+          hr = hr+1;
+      }
+    }
+    if (hr < 10) {hr = "0"+hr}
+    if (min < 10) {min = "0"+min}
+    if (segs < 10) {segs = "0"+segs}
+    var fin = hr+":"+min+":"+segs
+    return fin;
+}
+function contagem(){
+    segsAtend++;
+    var t = formatatempo(segsAtend);
+    $("#timer").html(t);
+}
+function contagemAtendimentoStart(){
+    contadorAtendimento = setInterval(contagem, 1000);
+}
+function contagemAtendimentoStop(){
+    segsAtend = 0;
+    $("#timer").html('00:00:00');
+    clearInterval(contadorAtendimento);
+}
+
 // UM CONSOLE.LOG() ou IMPRIME NUMA TAG COM ID = console
 function print(data){
     if(msieversion==true){
@@ -2811,7 +3303,6 @@ function print(data){
 
 // VERIFICA SE O QUE FOI DIGITADO É UM NUMERO OU NÃO
 function isNumberKey(evt){
-   console.log('event', evt);
    var charCode = (evt.which) ? evt.which : event.keyCode
    if (charCode > 31 && (charCode < 48 || charCode > 57))
       return false;
