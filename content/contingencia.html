@@ -1,0 +1,34 @@
+<div class="contingencia">
+    <div class="menu_atendimento">
+        <ul><li id="bt_retornar"><a href="#">Retornar</a></li></ul>
+    </div>
+    <div class="content">
+        <h1>Contingencia - <span id="monitor_senhas_data"></span></h1>
+        <div class="box_historico">
+            <p><strong>Imprimir senhas num total de até 50 senhas por impressão</strong></p>
+            <form action="" method="post" class="align_left" id="crmForm">
+                <div class="line">
+                    <div class="col align_left">
+                        <h4>Senha Inicial</h4>
+                        <p>
+                            <input type="text" onkeypress="return isNumberKey(event)" id="senhainicio" name="senhainicio" required data-js="senhainicio">
+                        </p>
+                    </div>
+                    <div class="col align_left">
+                        <h4>Senha Final</h4>
+                        <p>
+                            <input type="text" onkeypress="return isNumberKey(event)" id="senhafim" name="senhafim" required data-js="senhafim">
+                        </p>
+                    </div>
+                    <div class="col align-left">
+                        <input id="usahora" type="checkbox" checked="usahora" data-js="usahora">
+                        <label for="usahora">Imprimir no comprovante Hora e Data</label>
+                    </div>
+                </div>
+                <p class="align_right">
+                    <input type="submit" class="printct" name="printct" id="printct" value="Imprimir">
+                </p>
+            </form> 
+        </div> 
+    </div>
+</div>

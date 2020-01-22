@@ -89,9 +89,24 @@
 
         </div>
     </div>
+	<script>
+	//bloqueia o usuario fechar a aplicação via ALT+F4
+	document.onkeydown = function(evt) {
+		evt = evt || window.event;
+		//Get key unicode
+		var unicode = evt.keyCode ? evt.keyCode : evt.charCode;
+
+		//Check it it's ALT or F4 (115)
+		if (unicode == 115 || evt.altKey == 1)
+		{
+			window.event.cancelBubble = true;
+			window.event.returnValue = false;
+		}
+	};
+	</script>
     <script src="assets/js/json2.js"></script>
     <script src="assets/js/jquery.js"></script>
-    <script src="assets/js/script.js"></script>
+    <script src="assets/js/script_atendeWeb.js"></script>
     <script src="assets/js/jquery.showLoading.js"></script>
     
 </body>

@@ -1,0 +1,34 @@
+{
+  "productName": "angular-electron",
+  "directories": {
+    "output": "release/"
+  },
+  "files": [
+    "**/*",
+    "!**/*.ts",
+    "!package.json",
+    "!package-lock.json",
+    "!_config.yml"
+  ],
+  "win": {
+    "icon": "assets/img/favicon256.x256.jpg",
+    "target": [
+      {
+        "target": "portable",
+        "arch": "ia32"
+      }
+    ]
+  },
+  "mac": {
+    "icon": "assets/img/favicon256.x256.jpg",
+    "target": [
+      "dmg"
+    ]
+  },
+  "linux": {
+    "icon": "assets/img/favicon256.x256.jpg",
+    "target": [
+      "AppImage"
+    ]
+  }
+}

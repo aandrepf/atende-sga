@@ -2,6 +2,7 @@
     "senhas": [{
         "idAtendimento": 1925,
         "senha": "B1002",
+        "hostname": "XPTO",
         "dtImpressao": "08/05/2019 19:28:40",
         "dtChamada": "08/05/2019 23:39:55",
         "dtFim": "08/05/2019 23:41:06",
@@ -39,6 +40,7 @@
     }, {
         "idAtendimento": 1928,
         "senha": "B1003",
+        "hostname": "XPTO2",
         "dtImpressao": "08/05/2019 19:31:42",
         "dtChamada": "08/05/2019 23:41:09",
         "dtFim": "08/05/2019 23:41:16",
@@ -76,6 +78,124 @@
     }, {
         "idAtendimento": 1929,
         "senha": "B1004",
+        "hostname": "XPTO3",
+        "dtImpressao": "08/05/2019 19:31:58",
+        "dtChamada": "08/05/2019 23:41:20",
+        "dtFim": "08/05/2019 23:41:30",
+        "dtInicioAtendimento": "08/05/2019 23:41:22",
+        "flgPriorizada": false,
+        "qtdRechamada": 0,
+        "stsEnviado": 0,
+        "tipoFilaRedirecionamento": false,
+        "categoria": {
+            "id": 31,
+            "tipoCategoria": "B ",
+            "nomeCategoria": "CAIXA PRIORITÁRIO",
+            "senhaInicial": 1001,
+            "senhaFinal": 1500,
+            "localAtendimento": {
+                "idLocalAtendimento": 1,
+                "descricaoLocalAtendimento": "CAIXA"
+            },
+            "isCliente": false,
+            "metaDia": 1200,
+            "minAmarelo": 75,
+            "minVermelho": 90,
+            "contExclusaoAtendimento": 0
+        },
+        "stsAtend": {
+            "idAtend": 1,
+            "descricaoAtend": "CONCLUIDA"
+        },
+        "tme": "04:09:22",
+        "tma": "00:00:10",
+        "terminalPosicao": "03",
+        "nomeUsuario": "ZE",
+        "porcentagemMeta": 1200,
+        "status": "CONCLUIDA"
+    },
+    {
+        "idAtendimento": 1929,
+        "senha": "B1004",
+        "hostname": "XPTO4",
+        "dtImpressao": "08/05/2019 19:31:58",
+        "dtChamada": "08/05/2019 23:41:20",
+        "dtFim": "08/05/2019 23:41:30",
+        "dtInicioAtendimento": "08/05/2019 23:41:22",
+        "flgPriorizada": false,
+        "qtdRechamada": 0,
+        "stsEnviado": 0,
+        "tipoFilaRedirecionamento": false,
+        "categoria": {
+            "id": 31,
+            "tipoCategoria": "B ",
+            "nomeCategoria": "CAIXA PRIORITÁRIO",
+            "senhaInicial": 1001,
+            "senhaFinal": 1500,
+            "localAtendimento": {
+                "idLocalAtendimento": 1,
+                "descricaoLocalAtendimento": "CAIXA"
+            },
+            "isCliente": false,
+            "metaDia": 1200,
+            "minAmarelo": 75,
+            "minVermelho": 90,
+            "contExclusaoAtendimento": 0
+        },
+        "stsAtend": {
+            "idAtend": 1,
+            "descricaoAtend": "CONCLUIDA"
+        },
+        "tme": "04:09:22",
+        "tma": "00:00:10",
+        "terminalPosicao": "03",
+        "nomeUsuario": "ZE",
+        "porcentagemMeta": 1200,
+        "status": "CONCLUIDA"
+    },
+    {
+        "idAtendimento": 1929,
+        "senha": "B1004",
+        "hostname": "XPTO5",
+        "dtImpressao": "08/05/2019 19:31:58",
+        "dtChamada": "08/05/2019 23:41:20",
+        "dtFim": "08/05/2019 23:41:30",
+        "dtInicioAtendimento": "08/05/2019 23:41:22",
+        "flgPriorizada": false,
+        "qtdRechamada": 0,
+        "stsEnviado": 0,
+        "tipoFilaRedirecionamento": false,
+        "categoria": {
+            "id": 31,
+            "tipoCategoria": "B ",
+            "nomeCategoria": "CAIXA PRIORITÁRIO",
+            "senhaInicial": 1001,
+            "senhaFinal": 1500,
+            "localAtendimento": {
+                "idLocalAtendimento": 1,
+                "descricaoLocalAtendimento": "CAIXA"
+            },
+            "isCliente": false,
+            "metaDia": 1200,
+            "minAmarelo": 75,
+            "minVermelho": 90,
+            "contExclusaoAtendimento": 0
+        },
+        "stsAtend": {
+            "idAtend": 1,
+            "descricaoAtend": "CONCLUIDA"
+        },
+        "tme": "04:09:22",
+        "tma": "00:00:10",
+        "terminalPosicao": "03",
+        "nomeUsuario": "ZE",
+        "porcentagemMeta": 1200,
+        "status": "CONCLUIDA"
+    },
+    {
+        "idAtendimento": 1929,
+        "senha": "B1004",
+        "hostname": "XPTO5",
         "dtImpressao": "08/05/2019 19:31:58",
         "dtChamada": "08/05/2019 23:41:20",
         "dtFim": "08/05/2019 23:41:30",
